@@ -1,0 +1,26 @@
+.container {
+  width: 960px;
+  margin: auto;
+  background: beige;
+}
+@media screen and (max-width: 768px) {
+  .container {
+    width: 100%;
+    margin: auto;
+    /* text-align: center; */
+  }
+}
+table {
+  border-collapse: collapse;
+  margin: auto;
+}
+th,
+td {
+  font-weight: normal;
+}
+.tr1{
+  background: rgb(248, 184, 128);
+}
+.tr3{
+  border-bottom: 1px solid #555;
+}
