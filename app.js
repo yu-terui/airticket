@@ -2,11 +2,9 @@ const path = require('path');
 const express = require('express');
 const ejs = require('ejs');
 const app = express();
-// const bodyParser = require('body-parser');
 const port = 3000;
 
 app.set('view engine', 'ejs');
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 const mysql = require('mysql2');
 
@@ -33,9 +31,6 @@ app.post('/', (req, res) => {
 });
 
 
-// app.get('/create', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'html/form.html'))
-// });
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     res.render('index', {
