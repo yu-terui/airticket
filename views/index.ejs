@@ -7,15 +7,23 @@
     </head>
     <body>
         <div class="container">
-            <select name="evaluation" id="evaluation">
-                <option selected>選択してください</option>
+            <select name="evaluation_sort" id="evaluation_sort">
+                <option selected>ソート機能</option>
                 <option value="1">評価の高い順</option>
                 <option value="2">評価の低い順</option>
+            </select>
+            <select name="evaluation_search" id="evaluation_search">
+                <option selected>絞り込み機能</option>
+                <option value="5">評価： 5</option>
+                <option value="4">評価： 4</option>
+                <option value="3">評価： 3</option>
+                <option value="2">評価： 2</option>
+                <option value="1">評価： 1</option>
             </select>
             <table id="contents">
                 <% for(let i=0; i < personas.length; i++){ %>
                     <tr class="tr1">
-                        <td> 評価：　<%= personas[i].rating %>
+                        <td> 評価： <%= personas[i].rating %>
                         </td>
                     </tr>
                     <tr class="tr2">
@@ -32,15 +40,15 @@
             </table>
         </div>
         <script type="text/javascript">
-
-            let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
-            let evaluation = document.querySelector("#evaluation");
+        let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
+            //評価・ソート機能
+            let evaluation_sort = document.querySelector("#evaluation_sort");
             function insert(i) {
                 let contents = document.getElementById("contents");
                 //リスト追加
                 let tr1 = `<tr class="tr1">`;
                 tr1 += `
-                        <td> 評価：　${personasList[i].rating}</td>
+                        <td> 評価： ${personasList[i].rating}</td>
                     </tr>
                     <tr class="tr2">
                         <td>
@@ -54,7 +62,7 @@
                     </tr>`;
                 contents.insertAdjacentHTML("beforeend", tr1);
             }
-            evaluation.addEventListener('change', function () {
+            evaluation_sort.addEventListener('change', function () {
                 //デフォルトをリセット
                 let contents = document.getElementById("contents");
                 while (contents.firstChild) {
@@ -83,6 +91,70 @@
                     }
                 }
             });
+            //評価・絞り込み機能
+            let evaluation_search = document.querySelector("#evaluation_search")
+            list5 = personasList.filter(num => num.rating === 5);
+            list4 = personasList.filter(num => num.rating === 4);
+            list3 = personasList.filter(num => num.rating === 3);
+            list2 = personasList.filter(num => num.rating === 2);
+            list1 = personasList.filter(num => num.rating === 1);
+            function insert(array,i) {
+                let contents = document.getElementById("contents");
+                //リスト追加
+                let div = `<div id="frame">`;
+                div += `<tr class="tr1">
+                        <td> 評価： ${array[i].rating}</td>
+                    </tr>
+                    <tr class="tr2">
+                        <td>
+                            ${array[i].id}. ${array[i].username} （${array[i].age}歳）
+                        </td>
+                    </tr>
+                    <tr class="tr3">
+                        <td>
+                            ${array[i].reason}
+                        </td>
+                    </tr>
+                    </div>`;
+                contents.insertAdjacentHTML("beforeend", div);
+            }
+            evaluation_search.addEventListener('change', function(){
+                //デフォルトをリセット
+                let contents = document.getElementById("contents");
+                while (contents.firstChild) {
+                    contents.removeChild(contents.firstChild);
+                }
+                //評価:5
+                if (event.target.value == 5) {
+                        for(let i = 0; i < list5.length; i++){
+                            insert(list5,i)
+                        }
+                }
+                //評価:4
+                if (event.target.value == 4) {
+                        for(let i = 0; i < list4.length; i++){
+                            insert(list4,i)
+                        }
+                }
+                //評価:3
+                if (event.target.value == 3) {
+                        for(let i = 0; i < list3.length; i++){
+                            insert(list3,i)
+                        }
+                }
+                //評価:2
+                if (event.target.value == 2) {
+                        for(let i = 0; i < list2.length; i++){
+                            insert(list2,i)
+                        }
+                }
+                //評価:1
+                if (event.target.value == 1) {
+                        for(let i = 0; i < list1.length; i++){
+                            insert(list1,i)
+                        }
+                }
+            })
         </script>
     </body>
 </html>
