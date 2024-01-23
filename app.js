@@ -30,7 +30,6 @@ app.post('/', (req, res) => {
   });
 });
 
-
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     res.render('index', {
@@ -38,35 +37,5 @@ app.post('/', (req, res) => {
     });
   });
 });
-
-// app.get('/edit/:id', (req, res) => {
-//   const sql = "SELECT * FROM personas WHERE id = ?";
-//   con.query(sql, [req.params.id], function (err, result, fields) {
-//     if (err) throw err;
-//     res.render('edit', {
-//       user: result
-//     });
-//   });
-// });
-
-// app.post('/update/:id', (req, res) => {
-//   const sql = "UPDATE personas SET ? WHERE id = " + req.params.id;
-//   con.query(sql, req.body, function (err, result, fields) {
-//     if (err) throw err;
-//     console.log(result);
-//     res.redirect('/');
-//   });
-// });
-
-// app.get('/delete/:id', (req, res) => {
-//   const sql = "DELETE FROM personas WHERE id = ?";
-//   con.query(
-//     sql, [req.params.id],
-//     function (err, result, fields) {
-//       if (err) throw err;
-//       console.log(result);
-//       res.redirect('/');
-//     });
-// });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

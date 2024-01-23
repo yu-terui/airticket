@@ -7,8 +7,13 @@
   .container {
     width: 100%;
     margin: auto;
-    /* text-align: center; */
   }
+}
+select{
+  display: block;
+  margin: auto;
+  margin-bottom: 5px;
+  padding: 5px;
 }
 table {
   border-collapse: collapse;
