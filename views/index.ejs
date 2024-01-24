@@ -25,6 +25,21 @@
                 <div id="graph">
                 </div>
             </div>
+            <form action="/" method="post">
+                <div class="wrap">
+                    <label for="username">ユーザー名</label><input type="text" id="username" name="username">
+                </div>
+                <div class="wrap">
+                    <label for="age">年齢</label><input type="text" id="age" name="age">
+                </div>
+                <div class="wrap">
+                    <label for="rating">評価</label><input type="text" id="rating" name="rating">
+                </div>
+                <div class="wrap">
+                    <label for="reason">評価内容</label><textarea name="reason" id="reason" cols="30" rows="5"></textarea>
+                </div>
+                <button type="submit" id="submitBtn">登録</button>
+            </form>
             <table id="contents">
                 <% for(let i=0; i < personas.length; i++){ %>
                     <tr class="tr1">

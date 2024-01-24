@@ -60,3 +60,14 @@ td {
   background: rgb(32, 178, 170,.7);
   border: 1px solid #555;
 }
+form{
+  text-align: center;
+  margin: 10px;
+}
+.wrap{
+  margin: auto;
+  width: 350px;
+  display: flex;
+  justify-content:space-between;
+  padding: 5px;
+}
