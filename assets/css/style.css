@@ -1,7 +1,9 @@
-.container {
-  width: 960px;
-  margin: auto;
+body {
   background: beige;
+}
+.container {
+  width: 768px;
+  margin: auto;
 }
 @media screen and (max-width: 768px) {
   .container {
@@ -9,10 +11,16 @@
     margin: auto;
   }
 }
+section{
+  padding: 15px;
+  border-bottom: 1px solid #555;
+}
+h1,h2{
+  font-weight: normal;
+}
 select {
   display: block;
   margin: auto;
-  margin-bottom: 5px;
   padding: 5px;
 }
 table {
@@ -26,48 +34,71 @@ td {
 .tr1 {
   background: rgb(248, 184, 128);
 }
-.tr3 {
+.tr4 {
+  text-align: right;
   border-bottom: 1px solid #555;
+}
+.tr4 a {
+  padding: 0 15px;
+  text-decoration: none;
+  font-size: 90%;
+  color: white;
+  background: grey;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+.tr4 a:hover {
+  opacity: 0.7;
 }
 #graph_wrap {
   font-size: 80%;
   margin: 10px;
-  margin-left: 25% ;
+  margin-left: 25%;
 }
-#graph{
+#graph {
   border-left: 2px solid #555;
 }
 @media screen and (max-width: 768px) {
   #graph_wrap {
-  margin-left: 15% ;
-}
+    margin-left: 15%;
+  }
 }
 #graph1 {
   padding: 0 10px;
   width: 30%;
-  background: rgb(135, 206, 250,.7);
+  background: rgb(135, 206, 250, 0.7);
   border: 1px solid #555;
 }
 #graph2 {
   padding: 0 10px;
   width: 61%;
-  background: rgb(102, 205, 170,.7);
+  background: rgb(102, 205, 170, 0.7);
   border: 1px solid #555;
 }
 #graph3 {
   padding: 0 10px;
   width: 10%;
-  background: rgb(32, 178, 170,.7);
+  background: rgb(32, 178, 170, 0.7);
   border: 1px solid #555;
 }
-form{
+form {
   text-align: center;
   margin: 10px;
 }
-.wrap{
+button {
+  background: grey;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+button:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+.wrap {
   margin: auto;
   width: 350px;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   padding: 5px;
 }

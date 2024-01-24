@@ -37,5 +37,22 @@ app.post('/', (req, res) => { //データベースを変更したいときはpos
     });
   });
 });
+app.get('/edit/:id', (req, res) => {//getでデータ取得
+  const sql = "SELECT * FROM personas WHERE id = ?";
+  con.query(sql, [req.params.id], function (err, result, fields) {
+    if (err) throw err;
+    res.render('edit', {
+      personas: result
+    });
+  });
+});
+app.post('/update/:id', (req, res) => {//postでデータ更新
+  const sql = "UPDATE personas SET ? WHERE id = " + req.params.id;
+  con.query(sql, req.body, function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+    res.redirect('/');
+  });
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

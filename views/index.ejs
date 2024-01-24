@@ -7,57 +7,70 @@
     </head>
     <body>
         <div class="container">
-            <select name="evaluation_sort" id="evaluation_sort">
-                <option selected>ソート機能</option>
-                <option value="1">評価の高い順</option>
-                <option value="2">評価の低い順</option>
-            </select>
-            <select name="evaluation_search" id="evaluation_search">
-                <option selected>絞り込み機能</option>
-                <option value="5">評価： 5</option>
-                <option value="4">評価： 4</option>
-                <option value="3">評価： 3</option>
-                <option value="2">評価： 2</option>
-                <option value="1">評価： 1</option>
-            </select>
-            <div id="graph_wrap">
-                <p>年代別グラフ</p>
-                <div id="graph">
+            <h1>商品レビュー</h1>
+            <section>
+                <form action="/" method="post">
+                    <h2>レビューを投稿する</h2>
+                    <div class="wrap">
+                        <label for="username">ユーザー名</label><input type="text" id="username" name="username">
+                    </div>
+                    <div class="wrap">
+                        <label for="age">年齢</label><input type="text" id="age" name="age">
+                    </div>
+                    <div class="wrap">
+                        <label for="rating">評価</label><input type="text" id="rating" name="rating">
+                    </div>
+                    <div class="wrap">
+                        <label for="reason">評価内容</label><textarea name="reason" id="reason" cols="30" rows="5"></textarea>
+                    </div>
+                    <button type="submit" id="submitBtn">投稿</button>
+                </form>
+            </section>
+            <section>
+                <div id="graph_wrap">
+                    <p>年代別グラフ</p>
+                    <div id="graph">
+                    </div>
                 </div>
-            </div>
-            <form action="/" method="post">
+            </section>
+            <section>
                 <div class="wrap">
-                    <label for="username">ユーザー名</label><input type="text" id="username" name="username">
+                    <select name="evaluation_sort" id="evaluation_sort">
+                        <option value="1" selected>評価の高い順</option>
+                        <option value="2">評価の低い順</option>
+                    </select>
+                    <select name="evaluation_search" id="evaluation_search">
+                        <option value="5" selected>評価： 5</option>
+                        <option value="4">評価： 4</option>
+                        <option value="3">評価： 3</option>
+                        <option value="2">評価： 2</option>
+                        <option value="1">評価： 1</option>
+                    </select>
                 </div>
-                <div class="wrap">
-                    <label for="age">年齢</label><input type="text" id="age" name="age">
-                </div>
-                <div class="wrap">
-                    <label for="rating">評価</label><input type="text" id="rating" name="rating">
-                </div>
-                <div class="wrap">
-                    <label for="reason">評価内容</label><textarea name="reason" id="reason" cols="30" rows="5"></textarea>
-                </div>
-                <button type="submit" id="submitBtn">登録</button>
-            </form>
-            <table id="contents">
-                <% for(let i=0; i < personas.length; i++){ %>
-                    <tr class="tr1">
-                        <td> 評価： <%= personas[i].rating %>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <%= personas[i].id %>. <%= personas[i].username %> （<%= personas[i].age %>歳）
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <%= personas[i].reason %>
-                        </td>
-                    </tr>
-                    <% } %>
-            </table>
+            </section>
+            <section>
+                <table id="contents">
+                    <% for(let i=0; i < personas.length; i++){ %>
+                        <tr class="tr1">
+                            <td> 評価： <%= personas[i].rating %>
+                            </td>
+                        </tr>
+                        <tr class="tr2">
+                            <td>
+                                <%= personas[i].id %>. <%= personas[i].username %> （<%= personas[i].age %>歳）
+                            </td>
+                        </tr>
+                        <tr class="tr3">
+                            <td>
+                                <%= personas[i].reason %>
+                            </td>
+                        </tr>
+                        <tr class="tr4">
+                            <td id="updateBtn"><a href="/edit/<%= personas[i].id %>">更新</a></td>
+                        </tr>
+                        <% } %>
+                </table>
+            </section>
         </div>
         <script type="text/javascript">
         let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
@@ -186,6 +199,23 @@
                 <p id="graph2">30代：<br>${age30s.length}人</p>
                 <p id="graph3">40代：<br>${age40s.length}人</p>`;
                 graph.insertAdjacentHTML("beforeend", p);
+            //新規追加機能・空白チェック
+            let username = document.getElementById("username");
+            let age = document.getElementById("age");
+            let rating = document.getElementById("rating");
+            let reason = document.getElementById("reason");
+            let submitBtn = document.getElementById("submitBtn");
+            submitBtn.addEventListener("click", function () {
+                if (
+                    username.value==="" |
+                    age.value==="" |
+                    rating.value==="" |
+                    reason.value===""
+                ) {
+                    alert('すべての項目を入力してください')
+                    event.preventDefault();
+                }
+            });
         </script>
     </body>
 </html>
