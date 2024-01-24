@@ -9,7 +9,7 @@
     margin: auto;
   }
 }
-select{
+select {
   display: block;
   margin: auto;
   margin-bottom: 5px;
@@ -23,13 +23,40 @@ th,
 td {
   font-weight: normal;
 }
-.tr1{
+.tr1 {
   background: rgb(248, 184, 128);
 }
-.tr3{
+.tr3 {
   border-bottom: 1px solid #555;
 }
-
-.hidden{
-  display: none;
+#graph_wrap {
+  font-size: 80%;
+  margin: 10px;
+  margin-left: 25% ;
+}
+#graph{
+  border-left: 2px solid #555;
+}
+@media screen and (max-width: 768px) {
+  #graph_wrap {
+  margin-left: 15% ;
+}
+}
+#graph1 {
+  padding: 0 10px;
+  width: 30%;
+  background: rgb(135, 206, 250,.7);
+  border: 1px solid #555;
+}
+#graph2 {
+  padding: 0 10px;
+  width: 61%;
+  background: rgb(102, 205, 170,.7);
+  border: 1px solid #555;
+}
+#graph3 {
+  padding: 0 10px;
+  width: 10%;
+  background: rgb(32, 178, 170,.7);
+  border: 1px solid #555;
 }

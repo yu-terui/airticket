@@ -20,6 +20,11 @@
                 <option value="2">評価： 2</option>
                 <option value="1">評価： 1</option>
             </select>
+            <div id="graph_wrap">
+                <p>年代別グラフ</p>
+                <div id="graph">
+                </div>
+            </div>
             <table id="contents">
                 <% for(let i=0; i < personas.length; i++){ %>
                     <tr class="tr1">
@@ -154,7 +159,18 @@
                             insert(list1,i)
                         }
                 }
-            })
+            });
+            //年代別グラフ
+            age20s = personasList.filter(ages=> ages.age >= 20 && ages.age < 30);
+            age30s = personasList.filter(ages=> ages.age >= 30 && ages.age < 40);
+            age40s = personasList.filter(ages=> ages.age >= 40);
+            let graph = document.getElementById("graph");
+                //リスト追加
+                let p = `<p id="graph1">`;
+                p += `20代：<br>${age20s.length}人</p>
+                <p id="graph2">30代：<br>${age30s.length}人</p>
+                <p id="graph3">40代：<br>${age40s.length}人</p>`;
+                graph.insertAdjacentHTML("beforeend", p);
         </script>
     </body>
 </html>
