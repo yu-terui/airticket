@@ -35,12 +35,18 @@
             </section>
             <section>
                 <div class="wrap">
-                    <select name="evaluation_sort" id="evaluation_sort">
-                        <option value="1" selected>評価の高い順</option>
+                    <select
+                        name="evaluation_sort"
+                        id="evaluation_sort"
+                        onchange="select('<%= personas.rating %>');"
+                        >
+                        <option selected>評価順</option>
+                        <option value="1">評価の高い順</option>
                         <option value="2">評価の低い順</option>
                     </select>
                     <select name="evaluation_search" id="evaluation_search">
-                        <option value="5" selected>評価： 5</option>
+                        <option selected>評価値で絞る</option>
+                        <option value="5">評価： 5</option>
                         <option value="4">評価： 4</option>
                         <option value="3">評価： 3</option>
                         <option value="2">評価： 2</option>
@@ -75,55 +81,62 @@
         <script type="text/javascript">
         let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
             //評価・ソート機能
-            let evaluation_sort = document.querySelector("#evaluation_sort");
-            function insert(i) {
-                let contents = document.getElementById("contents");
-                //リスト追加
-                let tr1 = `<tr class="tr1">`;
-                tr1 += `
-                        <td> 評価： ${personasList[i].rating}</td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            ${personasList[i].id}. ${personasList[i].username} （${personasList[i].age}歳）
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            ${personasList[i].reason}
-                        </td>
-                    </tr>`;
-                contents.insertAdjacentHTML("beforeend", tr1);
+            function select(rating){
+                if(event.target.value == 1){
+                    // console.log('ok')
+                    location.href = "/select/:rating";
+                } else if(event.target.value == 2){
+                }
             }
-            evaluation_sort.addEventListener('change', function () {
-                //デフォルトをリセット
-                let contents = document.getElementById("contents");
-                while (contents.firstChild) {
-                    contents.removeChild(contents.firstChild);
-                }
-                //評価の高い順
-                if (event.target.value == 1) {
-                    personasList.sort(function (a, b) {
-                        if (a.rating > b.rating) return -1;
-                        if (a.rating < b.rating) return 1;
-                        return 0;
-                    })
-                    for (let i = 0; i < personasList.length; i++) {
-                        insert(i);
-                    }
-                }
-                //評価の低い順
-                else if (event.target.value == 2) {
-                    personasList.sort(function (a, b) {
-                        if (a.rating < b.rating) return -1;
-                        if (a.rating > b.rating) return 1;
-                        return 0;
-                    })
-                    for (let i = 0; i < personasList.length; i++) {
-                        insert(i);
-                    }
-                }
-            });
+            // let evaluation_sort = document.querySelector("#evaluation_sort");
+            // function insert(i) {
+            //     let contents = document.getElementById("contents");
+            //     //リスト追加
+            //     let tr1 = `<tr class="tr1">`;
+            //     tr1 += `
+            //             <td> 評価： ${personasList[i].rating}</td>
+            //         </tr>
+            //         <tr class="tr2">
+            //             <td>
+            //                 ${personasList[i].id}. ${personasList[i].username} （${personasList[i].age}歳）
+            //             </td>
+            //         </tr>
+            //         <tr class="tr3">
+            //             <td>
+            //                 ${personasList[i].reason}
+            //             </td>
+            //         </tr>`;
+            //     contents.insertAdjacentHTML("beforeend", tr1);
+            // }
+            // evaluation_sort.addEventListener('change', function () {
+            //     //デフォルトをリセット
+            //     let contents = document.getElementById("contents");
+            //     while (contents.firstChild) {
+            //         contents.removeChild(contents.firstChild);
+            //     }
+            //     //評価の高い順
+            //     if (event.target.value == 1) {
+            //         personasList.sort(function (a, b) {
+            //             if (a.rating > b.rating) return -1;
+            //             if (a.rating < b.rating) return 1;
+            //             return 0;
+            //         })
+            //         for (let i = 0; i < personasList.length; i++) {
+            //             insert(i);
+            //         }
+            //     }
+            //     //評価の低い順
+            //     else if (event.target.value == 2) {
+            //         personasList.sort(function (a, b) {
+            //             if (a.rating < b.rating) return -1;
+            //             if (a.rating > b.rating) return 1;
+            //             return 0;
+            //         })
+            //         for (let i = 0; i < personasList.length; i++) {
+            //             insert(i);
+            //         }
+            //     }
+            // });
             //評価・絞り込み機能
             let evaluation_search = document.querySelector("#evaluation_search")
             list5 = personasList.filter(num => num.rating === 5);
