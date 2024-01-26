@@ -1,11 +1,12 @@
+const http = require("http");
 const path = require("path");
-const express = require("express");
 const ejs = require("ejs");
-const app = express();
+const express = require("express"); //expressモジュールをロード
+const app = express(); //インスタンス化してappに代入
 const bodyParser = require("body-parser");
 const port = 3000;
 
-app.set("view engine", "ejs");
+app.set("view engine", "ejs");//テンプレートエンジンをEJSに
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const mysql = require("mysql2");
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
     //データベースを変更したいときはpost
     //新規追加
     const sql = "INSERT INTO personas SET ?";
-    con.query(sql, req.body, function (err, result, fields) {
+    con.query(sql, req.body, function (err, result, fields) {//query＝SQLの実行
       if (err) throw err;
       console.log(result);
       res.redirect("/");
@@ -39,17 +40,26 @@ app.get("/", (req, res) => {
     });
   });
 });
-
+//レンダリング
+// app.get("/select/:rating", (req, res) => {
+  // res.render('index.ejs');
+// });
 app.get("/select/:rating", (req, res) => {
-  //getでデータ取得
-  //sql上でソート
   const sql = "SELECT * FROM personas ORDER BY rating DESC;";
-  con.query(sql, [req.params.rating], function (err, result, fields) {
+  con.query(sql, req.body.desc, function (err, result, fields) {
     if (err) throw err;
     console.log(result);
     res.redirect("/");
+    //フォーム送信後の遷移場所＝action="/select/"だが、redirect("/")なので、元のページに戻る仕組み
   });
+  // con.query(sql, function (err, result, fields) {
+  //   if (err) throw err;
+  //   res.render("index", {
+  //     personas: result,
+  //   });
+  // });
 });
+
 
 app.get("/edit/:id", (req, res) => {
   //getでデータ取得

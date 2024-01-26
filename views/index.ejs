@@ -35,15 +35,13 @@
             </section>
             <section>
                 <div class="wrap">
-                    <select
-                        name="evaluation_sort"
-                        id="evaluation_sort"
-                        onchange="select('<%= personas.rating %>');"
-                        >
-                        <option selected>評価順</option>
-                        <option value="1">評価の高い順</option>
-                        <option value="2">評価の低い順</option>
-                    </select>
+                    <form action="/select/<%= personas[0].rating %>" method="get">
+                        <select name="evaluation_sort" id="evaluation_sort" onchange="submit(this.form)">
+                            <option selected>評価順</option>
+                            <option value="1" name="desc">評価の高い順</option>
+                            <option value="2" name="asc">評価の低い順</option>
+                        </select>
+                    </form>
                     <select name="evaluation_search" id="evaluation_search">
                         <option selected>評価値で絞る</option>
                         <option value="5">評価： 5</option>
@@ -79,14 +77,11 @@
             </section>
         </div>
         <script type="text/javascript">
-        let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
+            let personasList = JSON.parse('<%= JSON.stringify(personas) %>'.replace(/&#34;/g, '"'));
             //評価・ソート機能
-            function select(rating){
-                if(event.target.value == 1){
-                    // console.log('ok')
-                    location.href = "/select/:rating";
-                } else if(event.target.value == 2){
-                }
+            //indexejsの結果をレンダリングしてappjsにもっていく、appjsで条件分岐
+            function select(rating) {
+                location.href = "/";
             }
             // let evaluation_sort = document.querySelector("#evaluation_sort");
             // function insert(i) {
@@ -144,7 +139,7 @@
             list3 = personasList.filter(num => num.rating === 3);
             list2 = personasList.filter(num => num.rating === 2);
             list1 = personasList.filter(num => num.rating === 1);
-            function insert(array,i) {
+            function insert(array, i) {
                 let contents = document.getElementById("contents");
                 //リスト追加
                 let div = `<div id="frame">`;
@@ -164,7 +159,7 @@
                     </div>`;
                 contents.insertAdjacentHTML("beforeend", div);
             }
-            evaluation_search.addEventListener('change', function(){
+            evaluation_search.addEventListener('change', function () {
                 //デフォルトをリセット
                 let contents = document.getElementById("contents");
                 while (contents.firstChild) {
@@ -172,46 +167,46 @@
                 }
                 //評価:5
                 if (event.target.value == 5) {
-                        for(let i = 0; i < list5.length; i++){
-                            insert(list5,i)
-                        }
+                    for (let i = 0; i < list5.length; i++) {
+                        insert(list5, i)
+                    }
                 }
                 //評価:4
                 if (event.target.value == 4) {
-                        for(let i = 0; i < list4.length; i++){
-                            insert(list4,i)
-                        }
+                    for (let i = 0; i < list4.length; i++) {
+                        insert(list4, i)
+                    }
                 }
                 //評価:3
                 if (event.target.value == 3) {
-                        for(let i = 0; i < list3.length; i++){
-                            insert(list3,i)
-                        }
+                    for (let i = 0; i < list3.length; i++) {
+                        insert(list3, i)
+                    }
                 }
                 //評価:2
                 if (event.target.value == 2) {
-                        for(let i = 0; i < list2.length; i++){
-                            insert(list2,i)
-                        }
+                    for (let i = 0; i < list2.length; i++) {
+                        insert(list2, i)
+                    }
                 }
                 //評価:1
                 if (event.target.value == 1) {
-                        for(let i = 0; i < list1.length; i++){
-                            insert(list1,i)
-                        }
+                    for (let i = 0; i < list1.length; i++) {
+                        insert(list1, i)
+                    }
                 }
             });
             //年代別グラフ
-            age20s = personasList.filter(ages=> ages.age >= 20 && ages.age < 30);
-            age30s = personasList.filter(ages=> ages.age >= 30 && ages.age < 40);
-            age40s = personasList.filter(ages=> ages.age >= 40);
+            age20s = personasList.filter(ages => ages.age >= 20 && ages.age < 30);
+            age30s = personasList.filter(ages => ages.age >= 30 && ages.age < 40);
+            age40s = personasList.filter(ages => ages.age >= 40);
             let graph = document.getElementById("graph");
-                //リスト追加
-                let p = `<p id="graph1">`;
-                p += `20代：<br>${age20s.length}人</p>
+            //リスト追加
+            let p = `<p id="graph1">`;
+            p += `20代：<br>${age20s.length}人</p>
                 <p id="graph2">30代：<br>${age30s.length}人</p>
                 <p id="graph3">40代：<br>${age40s.length}人</p>`;
-                graph.insertAdjacentHTML("beforeend", p);
+            graph.insertAdjacentHTML("beforeend", p);
             //新規追加機能・空白チェック
             let username = document.getElementById("username");
             let age = document.getElementById("age");
@@ -220,10 +215,10 @@
             let submitBtn = document.getElementById("submitBtn");
             submitBtn.addEventListener("click", function () {
                 if (
-                    username.value==="" |
-                    age.value==="" |
-                    rating.value==="" |
-                    reason.value===""
+                    username.value === "" |
+                    age.value === "" |
+                    rating.value === "" |
+                    reason.value === ""
                 ) {
                     alert('すべての項目を入力してください')
                     event.preventDefault();
