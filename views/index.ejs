@@ -36,44 +36,24 @@
             <section>
                 <div class="wrap">
                         <select name="evaluation_sort" id="evaluation_sort">
-                            <option selected disabled>評価順</option>
-                            <option value="base" 
+                            <option value="" selected disabled>評価順</option>
+                            <option value="base"
                             <% if (order === "base") { %> selected <% } %>> 標準</option>
                             <option value="rating:desc" <% if (order === "desc") { %> selected <% } %>> 評価の高い順</option>
                             <option value="rating:asc"  <% if (order === "asc") { %> selected <% } %>> 評価の低い順</option>
                         </select>
                     <select name="evaluation_search" id="evaluation_search">
-                        <option selected disabled>評価値で絞る</option>
-                        <option value="5">評価： 5</option>
-                        <option value="4">評価： 4</option>
-                        <option value="3">評価： 3</option>
-                        <option value="2">評価： 2</option>
-                        <option value="1">評価： 1</option>
+                        <option value="" selected disabled>評価値で絞る</option>
+                        <option value="base"<% if (search === "base") { %> selected <% } %>>標準</option>
+                        <option value="rating:5" <% if (search === "5") { %> selected <% } %>>評価： 5</option>
+                        <option value="rating:4" <% if (search === "4") { %> selected <% } %>>評価： 4</option>
+                        <option value="rating:3" <% if (search === "3") { %> selected <% } %>>評価： 3</option>
+                        <option value="rating:2" <% if (search === "2") { %> selected <% } %>>評価： 2</option>
+                        <option value="rating:1" <% if (search === "1") { %> selected <% } %>>評価： 1</option>
                     </select>
                 </div>
             </section>
             <section>
-                <!-- <table id="contents">
-                    <% for(let i=0; i < filteredPersonas.length; i++){ %>
-                        <tr class="tr1">
-                            <td> 評価： <%= filteredPersonas[i].rating %>
-                            </td>
-                        </tr>
-                        <tr class="tr2">
-                            <td>
-                                <%= filteredPersonas[i].id %>. <%= filteredPersonas[i].username %> （<%= filteredPersonas[i].age %>歳）
-                            </td>
-                        </tr>
-                        <tr class="tr3">
-                            <td>
-                                <%= filteredPersonas[i].reason %>
-                            </td>
-                        </tr>
-                        <tr class="tr4">
-                            <td id="updateBtn"><a href="/edit/<%= filteredPersonas[i].id %>">更新</a></td>
-                        </tr>
-                        <% } %>
-                </table> -->
                 <table id="reviewArea"></table>
             </section>
         </div>
@@ -81,31 +61,70 @@
             const filteredPersonas = JSON.parse('<%= JSON.stringify(filteredPersonas) %>'.replace(/&#34;/g, '"'));
             const reviewArea = document.querySelector("#reviewArea")
             let evaluation_sort = document.querySelector("#evaluation_sort");
+            let evaluation_search = document.querySelector("#evaluation_search");
 
             // ページ読み込み時は初期値を出力
             window.onload = () => {
                 createTableData(filteredPersonas);
             };
+            //新規追加機能・空白チェック
+            let username = document.getElementById("username");
+            let age = document.getElementById("age");
+            let rating = document.getElementById("rating");
+            let reason = document.getElementById("reason");
+            let submitBtn = document.getElementById("submitBtn");
+            submitBtn.addEventListener("click", function () {
+                if (
+                    username.value === "" |
+                    age.value === "" |
+                    rating.value === "" |
+                    reason.value === ""
+                ) {
+                    alert('すべての項目を入力してください')
+                    event.preventDefault();
+                }
+            });
+            //年代別グラフ
+            age20s = filteredPersonas.filter(ages => ages.age >= 20 && ages.age < 30);
+            age30s = filteredPersonas.filter(ages => ages.age >= 30 && ages.age < 40);
+            age40s = filteredPersonas.filter(ages => ages.age >= 40);
+            let graph = document.getElementById("graph");
+                //リスト追加
+                let p = `<p id="graph1">`;
+                p += `20代：<br>${age20s.length}人</p>
+                <p id="graph2">30代：<br>${age30s.length}人</p>
+                <p id="graph3">40代：<br>${age40s.length}人</p>`;
+                graph.insertAdjacentHTML("beforeend", p);
             //評価・ソート機能
-            evaluation_sort.addEventListener('change',sortSelect )
-            //ソートを選択した際のメソッド
-            function sortSelect(){
+            //評価・絞り込み機能
+            evaluation_sort.addEventListener('change',sortAndSearch)
+            evaluation_search.addEventListener('change',sortAndSearch)
+            //ソートor絞り込みを選択した際のメソッド
+            function sortAndSearch(){
                 let res = ""
                 let filterObj = []
                 //ソートの値
                 let order = ""
+                //絞り込みの値
+                let search = ""
                 //ソートに選択された値を検索
                     for(option of evaluation_sort.options){
                         if(option.selected && option.value !==""){
                             filterObj["order"] = option.value
                         }
                     }
-                //order = rating:ascのような形に
+                //絞り込みに選択された値を検索
+                    for(option of evaluation_search.options){
+                        if(option.selected && option.value !==""){
+                            filterObj["search"] = option.value
+                        }
+                    }
+                //order = rating:asc／search = rating:1のような形に
                 const filterArray = Object.keys(filterObj).map(function (key) {
                     return [`${key} = ${filterObj[key]}`];
                     });
-                    // 複数あれば、「order=asc+search=1」のような形に変換、なければカンマは削除
-                    //join＝配列の要素をつなげて文字列に変換可能
+                    // 複数あれば、「order=asc+search=1」のような形に変換、なければカンマ削除
+                    //→ filterObjの中に、ソートと絞り込みの配列が一緒に入っている状態なので、joinで形状を変える
                 filterArray.length > 1 ?
                 res = filterArray.join("+") :
                 res = filterArray.join("")
@@ -115,7 +134,7 @@
             }
             // ブラウザに出力するデータを作成するメソッド
                 // personasObj...ブラウザ出力するデータ群
-            function createTableData(personasObj) {
+                function createTableData(personasObj) {
                 //デフォルトをリセット
                 while(reviewArea.firstChild) {
                     reviewArea.firstChild.remove()
@@ -156,148 +175,8 @@
                     reason.innerHTML = person.reason
                     // ブラウザへ出力
                     reviewArea.append(reviewContent)
-                })
-            }
-            // function insert(i) {
-            //     let contents = document.getElementById("contents");
-            //     //リスト追加
-            //     let tr1 = `<tr class="tr1">`;
-            //     tr1 += `
-            //             <td> 評価： ${filteredPersonas[i].rating}</td>
-            //         </tr>
-            //         <tr class="tr2">
-            //             <td>
-            //                 ${filteredPersonas[i].id}. ${filteredPersonas[i].username} （${filteredPersonas[i].age}歳）
-            //             </td>
-            //         </tr>
-            //         <tr class="tr3">
-            //             <td>
-            //                 ${filteredPersonas[i].reason}
-            //             </td>
-            //         </tr>`;
-            //     contents.insertAdjacentHTML("beforeend", tr1);
-            // }
-            // evaluation_sort.addEventListener('change', function () {
-            //     //デフォルトをリセット
-            //     let contents = document.getElementById("contents");
-            //     while (contents.firstChild) {
-            //         contents.removeChild(contents.firstChild);
-            //     }
-            //     //評価の高い順
-            //     if (event.target.value == 1) {
-            //         filteredPersonas.sort(function (a, b) {
-            //             if (a.rating > b.rating) return -1;
-            //             if (a.rating < b.rating) return 1;
-            //             return 0;
-            //         })
-            //         for (let i = 0; i < filteredPersonas.length; i++) {
-            //             insert(i);
-            //         }
-            //     }
-            //     //評価の低い順
-            //     else if (event.target.value == 2) {
-            //         filteredPersonas.sort(function (a, b) {
-            //             if (a.rating < b.rating) return -1;
-            //             if (a.rating > b.rating) return 1;
-            //             return 0;
-            //         })
-            //         for (let i = 0; i < filteredPersonas.length; i++) {
-            //             insert(i);
-            //         }
-            //     }
-            // });
-            //評価・絞り込み機能
-            let evaluation_search = document.querySelector("#evaluation_search")
-            list5 = filteredPersonas.filter(num => num.rating === 5);
-            list4 = filteredPersonas.filter(num => num.rating === 4);
-            list3 = filteredPersonas.filter(num => num.rating === 3);
-            list2 = filteredPersonas.filter(num => num.rating === 2);
-            list1 = filteredPersonas.filter(num => num.rating === 1);
-            function insert(array, i) {
-                let contents = document.getElementById("contents");
-                //リスト追加
-                let div = `<div id="frame">`;
-                div += `<tr class="tr1">
-                        <td> 評価： ${array[i].rating}</td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            ${array[i].id}. ${array[i].username} （${array[i].age}歳）
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            ${array[i].reason}
-                        </td>
-                    </tr>
-                    </div>`;
-                contents.insertAdjacentHTML("beforeend", div);
-            }
-            evaluation_search.addEventListener('change', function () {
-                //デフォルトをリセット
-                let contents = document.getElementById("contents");
-                while (contents.firstChild) {
-                    contents.removeChild(contents.firstChild);
-                }
-                //評価:5
-                if (event.target.value == 5) {
-                    for (let i = 0; i < list5.length; i++) {
-                        insert(list5, i)
-                    }
-                }
-                //評価:4
-                if (event.target.value == 4) {
-                    for (let i = 0; i < list4.length; i++) {
-                        insert(list4, i)
-                    }
-                }
-                //評価:3
-                if (event.target.value == 3) {
-                    for (let i = 0; i < list3.length; i++) {
-                        insert(list3, i)
-                    }
-                }
-                //評価:2
-                if (event.target.value == 2) {
-                    for (let i = 0; i < list2.length; i++) {
-                        insert(list2, i)
-                    }
-                }
-                //評価:1
-                if (event.target.value == 1) {
-                    for (let i = 0; i < list1.length; i++) {
-                        insert(list1, i)
-                    }
-                }
-            });
-            //年代別グラフ
-            age20s = filteredPersonas.filter(ages => ages.age >= 20 && ages.age < 30);
-            age30s = filteredPersonas.filter(ages => ages.age >= 30 && ages.age < 40);
-            age40s = filteredPersonas.filter(ages => ages.age >= 40);
-            let graph = document.getElementById("graph");
-            //リスト追加
-            let p = `<p id="graph1">`;
-            p += `20代：<br>${age20s.length}人</p>
-                <p id="graph2">30代：<br>${age30s.length}人</p>
-                <p id="graph3">40代：<br>${age40s.length}人</p>`;
-            graph.insertAdjacentHTML("beforeend", p);
-            //新規追加機能・空白チェック
-            let username = document.getElementById("username");
-            let age = document.getElementById("age");
-            let rating = document.getElementById("rating");
-            let reason = document.getElementById("reason");
-            let submitBtn = document.getElementById("submitBtn");
-            submitBtn.addEventListener("click", function () {
-                if (
-                    username.value === "" |
-                    age.value === "" |
-                    rating.value === "" |
-                    reason.value === ""
-                ) {
-                    alert('すべての項目を入力してください')
-                    event.preventDefault();
-                }
-            });
+                });
+            };
         </script>
     </body>
 </html>
