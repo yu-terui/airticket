@@ -1,13 +1,13 @@
-const http = require("http");
 const path = require("path");
-const ejs = require("ejs");
 const express = require("express"); //expressモジュールをロード
-const app = express(); //インスタンス化してappに代入
 const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const app = express(); //インスタンス化してappに代入
+
 const port = 3000;
 
-app.set("view engine", "ejs");//テンプレートエンジンをEJSに
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs");//テンプレートエンジンをEJSに
 
 const mysql = require("mysql2");
 
@@ -17,49 +17,31 @@ const con = mysql.createConnection({
   password: "rootroot",
   database: "products",
 });
+// cssファイルの取得
+app.use(express.static("assets"));
 
 // mysqlからデータを持ってくる
 app.get("/", (req, res) => {
-  // cssファイルの取得
-  app.use(express.static("assets"));
   const sql = "select * from personas";
-  app.post("/", (req, res) => {
-    //データベースを変更したいときはpost
-    //新規追加
-    const sql = "INSERT INTO personas SET ?";
-    con.query(sql, req.body, function (err, result, fields) {//query＝SQLの実行
-      if (err) throw err;
-      console.log(result);
-      res.redirect("/");
-    });
-  });
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     res.render("index", {
-      personas: result,
+      filteredPersonas: result,
+      order: ""
     });
   });
 });
-//レンダリング
-// app.get("/select/:rating", (req, res) => {
-  // res.render('index.ejs');
-// });
-app.get("/select/:rating", (req, res) => {
-  const sql = "SELECT * FROM personas ORDER BY rating DESC;";
-  con.query(sql, req.body.desc, function (err, result, fields) {
+
+//新規追加
+//データベースを変更したいときはpost
+app.post("/", (req, res) => {
+  const sql = "INSERT INTO personas SET ?";
+  con.query(sql, req.body, function (err, result, fields) {//query＝SQLの実行
     if (err) throw err;
     console.log(result);
     res.redirect("/");
-    //フォーム送信後の遷移場所＝action="/select/"だが、redirect("/")なので、元のページに戻る仕組み
   });
-  // con.query(sql, function (err, result, fields) {
-  //   if (err) throw err;
-  //   res.render("index", {
-  //     personas: result,
-  //   });
-  // });
 });
-
 
 app.get("/edit/:id", (req, res) => {
   //getでデータ取得
@@ -81,6 +63,38 @@ app.post("/update/:id", (req, res) => {
     console.log(result);
     res.redirect("/");
     //フォーム送信後の遷移場所＝action="/update/"だが、redirect("/")なので、元のページに戻る仕組み
+  });
+});
+
+//ソート
+app.get("/:filter", (req, res) => {
+  let order = ""
+  let orderQuery = ""
+  let filteredPersonas = []
+  const filter = req.params.filter.split("+")
+
+  // ソートの選択肢が格納されている分だけ処理繰り返し
+  filter.forEach((element) => {
+    if (element.indexOf("order") > -1) {
+      // order=rating:ascという形から=の後の記述のみ取得
+      const selectOrder = element.slice(element.indexOf("=") + 1)
+      if (element.indexOf("rating") > -1) {
+        //ascという形のみ取得
+        order = selectOrder.slice(selectOrder.indexOf(":") + 1)
+        if (order !== "base") orderQuery = `ORDER BY rating ${order}`
+      }
+      else if (selectOrder === "base") order = "base"
+    }
+  });
+  // 検索結果を反映した情報を取得
+  const sql = `SELECT * FROM personas ${orderQuery}`;
+  con.query(sql, function (err, result, fields) {
+    if (err) throw err;
+    // ソートされたユーザー情報と順番の情報を返す
+    res.render("index", {
+      filteredPersonas: result,
+      order: order
+    });
   });
 });
 
