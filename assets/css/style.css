@@ -33,15 +33,17 @@ td {
 }
 .tr1 {
   background: rgb(248, 184, 128);
+  display: block;
 }
 .tr4 {
-  text-align: right;
   border-bottom: 1px solid #555;
+  display: block;
 }
 .tr4 a {
-  padding: 0 15px;
   text-decoration: none;
+  padding: 0 15px;
   font-size: 90%;
+  text-align: right;
   color: white;
   background: grey;
   border: 1px solid #000;
