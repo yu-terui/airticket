@@ -7,129 +7,132 @@ body {
   margin: auto;
   text-align: center;
 }
-header{
-  background:rgb(81, 40, 11);
+header {
+  background: rgb(81, 40, 11);
   position: fixed;
   width: 100%;
-  z-index:101;
+  z-index: 101;
 }
-header ul{
+header ul {
   width: 768px;
   margin: auto;
-  z-index:100;
+  z-index: 100;
 }
-main{
+main {
   padding-top: 70px;
 }
-p, img{
+p,
+img {
   margin: 0;
   padding: 0;
 }
-li{
+li {
   display: inline-block;
   list-style-type: none;
 }
-li img{
+li img {
   width: 50px;
   padding: 5px;
 }
-h1,h2{
+h1,
+h2 {
   font-weight: normal;
 }
-button{
+button {
   background: rgb(81, 40, 11);
-  color: rgb(255,255,255);
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 3px;
   padding: 5px 10px;
   margin: 5px;
 }
-button:hover{
-  opacity: .7;
+button:hover {
+  opacity: 0.7;
 }
-a{
-  color: rgb(255,255,255);
+a {
+  color: rgb(255, 255, 255);
 }
-a:hover{
+a:hover {
   text-decoration: none;
-  color: rgb(255,255,255);
+  color: rgb(255, 255, 255);
 }
-dt,dd{
+dt,
+dd {
   font-weight: normal;
 }
 @media screen and (max-width: 768px) {
   .container {
     width: 90%;
   }
-  header ul{
+  header ul {
     width: 100%;
   }
 }
 /* index */
-.grid{
+.grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
-.item{
+.item {
   border-bottom: 1px solid #555;
   padding: 10px;
 }
-#catalog select{
+#catalog select {
   padding: 5px;
 }
-#catalog img{
+#catalog img {
   height: 200px;
 }
-#catalog img:hover{
-background: rgb(210, 180, 140,.5);
+#catalog img:hover {
+  background: rgb(210, 180, 140, 0.5);
 }
 /* ::beforeで星の背景・::afterで星の色塗りつぶし */
-.rateWrap{
+.rateWrap {
   display: flex;
   /* width: 220px; */
   padding: 5px;
 }
-.rateStar{
-  position:relative;
+.rateStar {
+  position: relative;
   display: inline-block;
   /* width: 100px; */
-  height: 20px;/* ★１個の幅 */
+  height: 20px; /* ★１個の幅 */
   font-size: 20px;
 }
 .rateStar::before,
-.rateStar::after{
+.rateStar::after {
   position: absolute;
   display: inline-block;
   height: 20px;
-  content:'★★★★★';
+  content: "★★★★★";
   line-height: 20px;
 }
-.rateStar::before{
+.rateStar::before {
   color: #555;
 }
-.rateStar::after{
+.rateStar::after {
   /* はみ出た部分を隠す */
   overflow: hidden;
   color: #ffb906;
-  width: calc(var(--score)*20px);
+  width: calc(var(--score) * 20px);
 }
 @media screen and (max-width: 768px) {
-  .grid{
+  .grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 /* product */
-#productArea{
+#productArea {
   border-bottom: 1px solid #555;
   padding-bottom: 30px;
 }
-#productArea img{
+#productArea img {
   height: 200px;
 }
-#productArea #description{
+#productArea #description {
   margin-bottom: 20px;
 }
-#reviewArea li{
+#reviewArea li {
   display: block;
   padding: 10px;
   border-bottom: 1px solid #000;
@@ -137,20 +140,20 @@ background: rgb(210, 180, 140,.5);
 /* register */
 /* confirm */
 #register input,
-#confirm input{
-display: block;
-margin: auto;
-padding: 5px;
-width: 50%;
+#confirm input {
+  display: block;
+  margin: auto;
+  padding: 5px;
+  width: 50%;
 }
 /* cart */
-#cartArea img{
+#cartArea img {
   height: 200px;
 }
-#cartArea .item{
+#cartArea .item {
   border: 1px solid #000;
   margin: 10px;
 }
-#cartArea .sumParag{
+#cartArea .sumParag {
   font-size: 120%;
 }
