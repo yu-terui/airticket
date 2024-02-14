@@ -26,22 +26,23 @@ app.get("/favicon.ico", (req, res) => {
 });
 
 //テーブル作成
-con.connect(function(err) {
+con.connect(function (err) {
   if (err) throw err;
-	console.log('Connected');
+  console.log("Connected");
   let sql = "create table if not exists cart (name varchar(45), price INT)";
   con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      console.log("table created")
+    if (err) throw err;
+    console.log("table created");
   });
 });
-con.connect(function(err) {
+con.connect(function (err) {
   if (err) throw err;
-	console.log('Connected');
-  let sql = "create table if not exists newusers (id INT auto_increment not null,userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));";
+  console.log("Connected");
+  let sql =
+    "create table if not exists newusers (id INT auto_increment not null,userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));";
   con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      console.log("table created")
+    if (err) throw err;
+    console.log("table created");
   });
 });
 
