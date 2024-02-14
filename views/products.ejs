@@ -53,9 +53,9 @@
             const productImgParag = document.createElement("p");
             const productImg = document.createElement("img");
             //カートに追加
-        addCart.addEventListener("click",function(){
-            alert('カートに追加しました')
-        });
+            addCart.addEventListener("click", function () {
+                alert('カートに追加しました')
+            });
             //ページ読み込み時は高い順
             window.onload = () => {
                 reviews.sort((a, b) => b.evaluation - a.evaluation);
@@ -82,8 +82,8 @@
                     const reviewList = document.createElement("li");
                     //データの挿入
                     reviewList.innerHTML
-                    = `評価：${data.evaluation}<br>${data.content}`
-                        reviewContent.appendChild(reviewList);
+                        = `評価：${data.evaluation}<br>${data.content}`
+                    reviewContent.appendChild(reviewList);
                 });
             }
             //値に応じた写真の挿入
