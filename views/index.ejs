@@ -2,181 +2,233 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>review</title>
-        <link type="text/css" rel="stylesheet" href="css/style.css">
+        <title>EC Store - 商品一覧</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body>
-        <div class="container">
-            <h1>商品レビュー</h1>
-            <section>
-                <form action="/" method="post">
-                    <h2>レビューを投稿する</h2>
-                    <div class="wrap">
-                        <label for="username">ユーザー名</label><input type="text" id="username" name="username">
-                    </div>
-                    <div class="wrap">
-                        <label for="age">年齢</label><input type="text" id="age" name="age">
-                    </div>
-                    <div class="wrap">
-                        <label for="rating">評価</label><input type="text" id="rating" name="rating">
-                    </div>
-                    <div class="wrap">
-                        <label for="reason">評価内容</label><textarea name="reason" id="reason" cols="30" rows="5"></textarea>
-                    </div>
-                    <button type="submit" id="submitBtn">投稿</button>
-                </form>
-            </section>
-            <section>
-                <div id="graph_wrap">
-                    <p>年代別グラフ</p>
-                    <div id="graph">
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="wrap">
-                        <select name="evaluation_sort" id="evaluation_sort">
-                            <option value="" selected disabled>評価順</option>
-                            <option value="base"
-                            <% if (order === "base") { %> selected <% } %>> 標準</option>
-                            <option value="rating:desc" <% if (order === "desc") { %> selected <% } %>> 評価の高い順</option>
-                            <option value="rating:asc"  <% if (order === "asc") { %> selected <% } %>> 評価の低い順</option>
-                        </select>
-                    <select name="evaluation_search" id="evaluation_search">
-                        <option value="" selected disabled>評価値で絞る</option>
-                        <option value="base"<% if (search === "base") { %> selected <% } %>>標準</option>
-                        <option value="rating:5" <% if (search === "5") { %> selected <% } %>>評価： 5</option>
-                        <option value="rating:4" <% if (search === "4") { %> selected <% } %>>評価： 4</option>
-                        <option value="rating:3" <% if (search === "3") { %> selected <% } %>>評価： 3</option>
-                        <option value="rating:2" <% if (search === "2") { %> selected <% } %>>評価： 2</option>
-                        <option value="rating:1" <% if (search === "1") { %> selected <% } %>>評価： 1</option>
+        <header>
+            <ul>
+                <li><a href="/"><img src="../assets/img/花アイコン.png" alt="花アイコン"></a></li>
+                <li><a href="/register"><img src="../assets/img/人型アイコン.png" alt="人型アイコン"></a></li>
+                <li><a href="/cart"><img src="../assets/img/カート.png" alt="カート"></a></li>
+            </ul>
+        </header>
+        <main>
+            <div class="container">
+                <h1>商品一覧</h1>
+                <div id="catalog">
+                    <select id="sortSelect">
+                        <option value="base" selected>商品名順</option>
+                        <option value="desc">価格の高い順</option>
+                        <option value="asc">価格の低い順</option>
+                        <option value="review_desc">レビューの評価順</option>
+                        <option value="review_total">レビューの多い順</option>
                     </select>
+                    <div class="grid"></div>
                 </div>
-            </section>
-            <section>
-                <table id="reviewArea"></table>
-            </section>
-        </div>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 EBA All rights reserved.</small>
+            </div>
+        </footer>
         <script type="text/javascript">
-            const filteredPersonas = JSON.parse('<%= JSON.stringify(filteredPersonas) %>'.replace(/&#34;/g, '"'));
-            const reviewArea = document.querySelector("#reviewArea")
-            let evaluation_sort = document.querySelector("#evaluation_sort");
-            let evaluation_search = document.querySelector("#evaluation_search");
-
-            // ページ読み込み時は初期値を出力
+            const products = JSON.parse('<%= JSON.stringify(products) %>'.replace(/&#34;/g, '"'));
+            //ページ読み込み時は初期値を出力
             window.onload = () => {
-                createTableData(filteredPersonas);
-            };
-            //新規追加機能・空白チェック
-            let username = document.getElementById("username");
-            let age = document.getElementById("age");
-            let rating = document.getElementById("rating");
-            let reason = document.getElementById("reason");
-            let submitBtn = document.getElementById("submitBtn");
-            submitBtn.addEventListener("click", function () {
-                if (
-                    username.value === "" |
-                    age.value === "" |
-                    rating.value === "" |
-                    reason.value === ""
-                ) {
-                    alert('すべての項目を入力してください')
-                    event.preventDefault();
+                createTableData(products);
+                // // // データベースproductsにavg・totalプロパティを追加
+                let avgNum = document.querySelectorAll(".avgNum")
+                function addAvgTotal(A, B, C) {
+                    for (let i = 0; i < avgNum.length; i++) {
+                        products[A].avg = avgNum[B].textContent;
+                    }
+                    let itemC = products.filter((products) => products.itemId == C)
+                    const evaluationC = itemC.map((e) => e.evaluation);
+                    const totalC = evaluationC.length;
+                    products[A].total = totalC;
                 }
-            });
-            //年代別グラフ
-            age20s = filteredPersonas.filter(ages => ages.age >= 20 && ages.age < 30);
-            age30s = filteredPersonas.filter(ages => ages.age >= 30 && ages.age < 40);
-            age40s = filteredPersonas.filter(ages => ages.age >= 40);
-            let graph = document.getElementById("graph");
-                //リスト追加
-                let p = `<p id="graph1">`;
-                p += `20代：<br>${age20s.length}人</p>
-                <p id="graph2">30代：<br>${age30s.length}人</p>
-                <p id="graph3">40代：<br>${age40s.length}人</p>`;
-                graph.insertAdjacentHTML("beforeend", p);
-            //評価・ソート機能
-            //評価・絞り込み機能
-            evaluation_sort.addEventListener('change',sortAndSearch)
-            evaluation_search.addEventListener('change',sortAndSearch)
-            //ソートor絞り込みを選択した際のメソッド
-            function sortAndSearch(){
-                let res = ""
-                let filterObj = []
-                //ソートの値
-                let order = ""
-                //絞り込みの値
-                let search = ""
-                //ソートに選択された値を検索
-                    for(option of evaluation_sort.options){
-                        if(option.selected && option.value !==""){
-                            filterObj["order"] = option.value
-                        }
-                    }
-                //絞り込みに選択された値を検索
-                    for(option of evaluation_search.options){
-                        if(option.selected && option.value !==""){
-                            filterObj["search"] = option.value
-                        }
-                    }
-                //order = rating:asc／search = rating:1のような形に
-                const filterArray = Object.keys(filterObj).map(function (key) {
-                    return [`${key} = ${filterObj[key]}`];
-                    });
-                    // 複数あれば、「order=asc+search=1」のような形に変換、なければカンマ削除
-                    //→ filterObjの中に、ソートと絞り込みの配列が一緒に入っている状態なので、joinで形状を変える
-                filterArray.length > 1 ?
-                res = filterArray.join("+") :
-                res = filterArray.join("")
-                //ソートしたユーザー情報でindexをレンダリング
-                    console.log(res);
-                    location.assign(`/${res}`)
+                // //アジサイ
+                addAvgTotal(0, 0, 1)
+                addAvgTotal(1, 0, 1)
+                // //アネモネ
+                addAvgTotal(2, 1, 2)
+                addAvgTotal(3, 1, 2)
+                addAvgTotal(4, 1, 2)
+                addAvgTotal(5, 1, 2)
+                // //カスミソウ
+                addAvgTotal(6, 2, 3)
+                addAvgTotal(7, 2, 3)
+                // //カーネーション
+                addAvgTotal(8, 3, 4)
+                addAvgTotal(9, 3, 4)
+                // //ガーベラ
+                addAvgTotal(11, 4, 5)
+                addAvgTotal(12, 4, 5)
+                // //キク
+                addAvgTotal(13, 5, 6)
+                addAvgTotal(14, 5, 6)
+                addAvgTotal(15, 5, 6)
+                addAvgTotal(16, 5, 6)
+                addAvgTotal(17, 5, 6)
+                addAvgTotal(18, 5, 6)
+                // //チューリップ
+                addAvgTotal(19, 6, 7)
+                addAvgTotal(20, 6, 7)
+                // //バラ
+                addAvgTotal(21, 7, 8)
+                addAvgTotal(22, 7, 8)
+                // //ヒマワリ
+                addAvgTotal(23, 8, 9)
+                addAvgTotal(24, 8, 9)
+                addAvgTotal(25, 8, 9)
+                addAvgTotal(26, 8, 9)
+                // //ユリ
+                addAvgTotal(27, 9, 10)
+                addAvgTotal(28, 9, 10)
+                addAvgTotal(29, 9, 10)
             }
-            // ブラウザに出力するデータを作成するメソッド
-                // personasObj...ブラウザ出力するデータ群
-                function createTableData(personasObj) {
+            function createTableData() {
                 //デフォルトをリセット
-                while(reviewArea.firstChild) {
-                    reviewArea.firstChild.remove()
+                const grid = document.querySelector(".grid");
+                while (grid.firstChild) {
+                    grid.removeChild(grid.firstChild);
                 }
-                // 渡されたオブジェクトの分だけリストデータの作成
-                personasObj.map((person) => {
-                    // ユーザー情報表示領域の作成
-                    const reviewContent    = document.createElement("div")
-                    //1行目
-                    const rating           = document.createElement("tr")
-                    //２行目
-                    const nameAndAge = document.createElement("tr")
-                    //３行目
-                    const reason        = document.createElement("tr")
-                    //４行目
-                    const editBtn        = document.createElement("tr")
-                    // 各要素へ属性の付与
-                    reviewContent.classList.add("review-content")
-                    rating.classList.add("rating","tr1")
-                    nameAndAge.classList.add("nameAndAge")
-                    reason.classList.add("reason")
-                    editBtn.classList.add("editBtn", "tr4")
-                    // ユーザーの名前と年齢を受け取る
-                    rating.innerHTML           = `<td>評価：${person.rating}</td>`
-                    nameAndAge.innerHTML = `<td>${person.username}さん<span>(${person.age}歳)</span></td>`
-                    reason.innerHTML           = `<td>${person.reason}</td>`
-                    editBtn.innerHTML           = `<td id="updateBtn"><a href="/edit/<%= filteredPersonas[0].id %>">更新</a></td>`
-                    // ユーザー情報表示領域の完成
-                    reviewContent.append(rating)
-                    reviewContent.append(nameAndAge)
-                    reviewContent.append(reason)
-                    reviewContent.append(editBtn)
-
-                    // 改行を含む文字列の場合、改行コードをbrタグに変換する
-                    if(person.reason.match("\n") !== null ) {
-                        person.reason = person.reason.replace(/\n/g, "<br>")
+                //重複したデータをフィルタリング
+                const dataFiltered =
+                    products.filter((val, i, self) => self.findIndex(
+                        (productsElement) => productsElement.name === val.name) === i);
+                //商品情報表示領域の作成
+                dataFiltered.map((data) => {
+                    //タグの生成
+                    const item = document.createElement("div");
+                    const productImgParag = document.createElement("p");
+                    const productImgAnchor = document.createElement("a");
+                    const productImg = document.createElement("img");
+                    const productName = document.createElement("p");
+                    const productPrice = document.createElement("p");
+                    const rateWrap = document.createElement("p");
+                    const avgNum = document.createElement("span");
+                    const rateStar = document.createElement("span");
+                    const total = document.createElement("span");
+                    //各要素へ属性の付与
+                    item.classList.add("item")
+                    productImgAnchor.setAttribute("href", `/products/${data.name}`);
+                    productName.classList.add("productName")
+                    productPrice.classList.add("productPrice")
+                    rateWrap.classList.add("rateWrap")
+                    avgNum.classList.add("avgNum")
+                    rateStar.classList.add("rateStar")
+                    total.classList.add("total")
+                    //商品情報を受け取る
+                    productName.innerHTML = `商品名：${data.name}`
+                    productPrice.innerHTML = `(税込${data.price}円)`
+                    //商品情報表示領域の完成
+                    productImgParag.append(productImgAnchor)
+                    productImgAnchor.append(productImg)
+                    item.append(productImgParag)
+                    item.append(productName)
+                    item.append(productPrice)
+                    //ブラウザに出力
+                    grid.append(item)
+                    //平均値とレビュー総数の挿入
+                    function insert(X) {
+                        //itemIdごとの新しい配列
+                        let itemX = products.filter((products) => products.itemId == X)
+                        //評価値のみを取り出す
+                        const evaluationX = itemX.map((e) => e.evaluation);
+                        //評価値から平均値を計算
+                        const avgX = evaluationX.reduce((a, b) => a + b) / evaluationX.length;
+                        const totalX = evaluationX.length;
+                        total.innerHTML = `評価（${totalX}件）：`;
+                        avgNum.innerHTML = Math.floor(avgX * 100) / 100;
+                        item.appendChild(rateWrap)
                     }
-                    reason.innerHTML = person.reason
-                    // ブラウザへ出力
-                    reviewArea.append(reviewContent)
+                    function rateStarStyle(Y) {
+                        rateStar.setAttribute("style", Y)
+                        rateWrap.appendChild(total)
+                        rateWrap.appendChild(avgNum)
+                        rateWrap.appendChild(rateStar)
+                    }
+                    //値に応じた写真・平均値・総数の挿入
+                    if (data.name == 'アジサイ') {
+                        productImg.setAttribute('src', '../assets/img/アジサイ.png')
+                        insert(1)
+                        rateStarStyle("--score:2.5")
+                    }
+                    if (data.name == 'アネモネ') {
+                        productImg.setAttribute('src', '../assets/img/アネモネ.png')
+                        insert(2)
+                        rateStarStyle("--score:3.25")
+                    }
+                    if (data.name == 'カスミソウ') {
+                        productImg.setAttribute('src', '../assets/img/カスミソウ.png')
+                        insert(3)
+                        rateStarStyle("--score:3.5")
+                    }
+                    if (data.name == 'カーネーション') {
+                        productImg.setAttribute('src', '../assets/img/カーネーション.png')
+                        insert(4)
+                        rateStarStyle("--score:3.33")
+                    }
+                    if (data.name == 'ガーベラ') {
+                        productImg.setAttribute('src', '../assets/img/ガーベラ.png')
+                        insert(5)
+                        rateStarStyle("--score:4.5")
+                    }
+                    if (data.name == 'キク') {
+                        productImg.setAttribute('src', '../assets/img/キク.png')
+                        insert(6)
+                        rateStarStyle("--score:3.5")
+                    }
+                    if (data.name == 'チューリップ') {
+                        productImg.setAttribute('src', '../assets/img/チューリップ.png')
+                        insert(7)
+                        rateStarStyle("--score:4.5")
+                    }
+                    if (data.name == 'バラ') {
+                        productImg.setAttribute('src', '../assets/img/バラ.png')
+                        insert(8)
+                        rateStarStyle("--score:2.5")
+                    }
+                    if (data.name == 'ヒマワリ') {
+                        productImg.setAttribute('src', '../assets/img/ヒマワリ.png')
+                        insert(9)
+                        rateStarStyle("--score:3.5")
+                    }
+                    if (data.name == 'ユリ') {
+                        productImg.setAttribute('src', '../assets/img/ユリ.png')
+                        insert(10)
+                        rateStarStyle("--score:3.66")
+                    }
                 });
             };
+            //ソート機能
+            sortSelect = document.querySelector("#sortSelect")
+            sortSelect.addEventListener("change", function () {
+                if (event.target.value == 'base') {
+                    products.sort((a, b) => {
+                        return a.name.localeCompare(b.name, "ja");
+                    });
+                    createTableData();
+                } else if (event.target.value == 'desc') {
+                    products.sort((a, b) => b.price - a.price);
+                    createTableData();
+                } else if (event.target.value == 'asc') {
+                    products.sort((a, b) => a.price - b.price);
+                    createTableData();
+                }
+                else if (event.target.value == 'review_desc') {
+                    products.sort((a, b) => b.avg - a.avg);
+                    createTableData();
+                }
+                else if (event.target.value == 'review_total') {
+                    products.sort((a, b) => b.total - a.total);
+                    createTableData();
+                }
+            });
         </script>
     </body>
 </html>

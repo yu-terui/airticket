@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>EC Store - 商品ページ</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+            <ul>
+                <li><a href="/"><img src="../assets/img/花アイコン.png" alt="花アイコン"></a></li>
+                <li><a href="/register"><img src="../assets/img/人型アイコン.png" alt="人型アイコン"></a></li>
+                <li><a href="/cart"><img src="../assets/img/カート.png" alt="カート"></a></li>
+            </ul>
+        </header>
+        <main>
+            <div class="container">
+                <form id="productArea" action="/addCart/<%= data[0].name %>" method="post">
+                    <h1><%= data[0].name %></h1>
+                    <input type="hidden" id="name" name="name" value="<%= data[0].name %>">
+                    <p id="description"></p>
+                    <p id="price">価格：<%= data[0].price %>円</p>
+                    <input type="hidden" id="price" name="price" value="<%= data[0].price %>">
+                    <p id="stock"></p>
+                    <button id="addCart">カートに入れる</button>
+                    <button><a href="/">一覧へ戻る</a></button>
+                </form>
+                <div id="reviewArea">
+                    <h2>レビュー</h2>
+                    <select id="sortSelect">
+                        <option value="desc" selected>評価の高い順</option>
+                        <option value="asc">評価の低い順</option>
+                    </select>
+                    <ul id="reviewContent"></ul>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 EBA All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+            const products = JSON.parse('<%= JSON.stringify(products) %>'.replace(/&#34;/g, '"'));
+            const reviews = JSON.parse('<%= JSON.stringify(reviews) %>'.replace(/&#34;/g, '"'));
+            const productArea = document.querySelector("#productArea")
+            const productName = document.querySelector("h1")
+            const description = document.getElementById("description")
+            const stock = document.getElementById("stock")
+            const addCart = document.getElementById("addCart")
+            const reviewContent = document.getElementById("reviewContent")
+            const productImgParag = document.createElement("p");
+            const productImg = document.createElement("img");
+            //カートに追加
+        addCart.addEventListener("click",function(){
+            alert('カートに追加しました')
+        });
+            //ページ読み込み時は高い順
+            window.onload = () => {
+                reviews.sort((a, b) => b.evaluation - a.evaluation);
+                createReviewsList(reviews);
+            }
+            //レビューソート機能
+            sortSelect = document.querySelector("#sortSelect")
+            sortSelect.addEventListener("change", function () {
+                if (event.target.value == 'desc') {
+                    reviews.sort((a, b) => b.evaluation - a.evaluation);
+                    createReviewsList();
+                } else if (event.target.value == 'asc') {
+                    reviews.sort((a, b) => a.evaluation - b.evaluation);
+                    createReviewsList();
+                }
+            });
+            //レビュー表示領域
+            function createReviewsList() {
+                //デフォルトをリセット
+                while (reviewContent.firstChild) {
+                    reviewContent.removeChild(reviewContent.firstChild);
+                }
+                reviews.map((data) => {
+                    const reviewList = document.createElement("li");
+                    //データの挿入
+                    reviewList.innerHTML
+                    = `評価：${data.evaluation}<br>${data.content}`
+                        reviewContent.appendChild(reviewList);
+                });
+            }
+            //値に応じた写真の挿入
+            if (productName.textContent == 'アジサイ') {
+                productImg.setAttribute('src', '../assets/img/アジサイ.png')
+                description.innerHTML = "梅雨の季節を美しく彩ってくれます。旬の時期は、5~6月ごろです。<br>花言葉は、「一家団欒」「辛抱強い愛情」「移り気」"
+                stock.innerHTML = "在庫数：30本"
+            }
+            if (productName.textContent == 'アネモネ') {
+                productImg.setAttribute('src', '../assets/img/アネモネ.png')
+                description.innerHTML = "鮮やかな赤や青紫の花を咲かせ、春の訪れを知らせてくれます。旬の時期は、2~4月ごろです。<br>花言葉は、「はかない恋」「君を愛す」"
+                stock.innerHTML = "在庫数：20本"
+            }
+            if (productName.textContent == 'カスミソウ') {
+                productImg.setAttribute('src', '../assets/img/カスミソウ.png')
+                description.innerHTML = "可憐で小さい花が魅力的で、近年ではドライフラワーとしても人気です。通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、「清らかな心」「無邪気」「幸福」「感謝」"
+                stock.innerHTML = "在庫数：15本"
+            }
+            if (productName.textContent == 'カーネーション') {
+                productImg.setAttribute('src', '../assets/img/カーネーション.png')
+                description.innerHTML = "母の日の贈り物として定番のお花です。旬の時期は3～5月ですが、通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、「女性の愛」「感動」「純粋な愛情」"
+                stock.innerHTML = "在庫数：10本"
+            }
+            if (productName.textContent == 'ガーベラ') {
+                productImg.setAttribute('src', '../assets/img/ガーベラ.png')
+                description.innerHTML = "花姿が明るく快活な印象なので、門出をお祝いするギフトとして選ばれます。通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、	「希望」「常に前進」"
+                stock.innerHTML = "在庫数：30本"
+            }
+            if (productName.textContent == 'キク') {
+                productImg.setAttribute('src', '../assets/img/キク.png')
+                description.innerHTML = "古くから日本人に愛されており、桜と並ぶ国花の一つです。通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、「高貴」「高尚」「高潔」"
+                stock.innerHTML = "在庫数：30本"
+            }
+            if (productName.textContent == 'チューリップ') {
+                productImg.setAttribute('src', '../assets/img/チューリップ.png')
+                description.innerHTML = "どの年代からも親しまれる、ポピュラーなお花の代表です。旬の時期は、2~5月ごろです。<br>花言葉は、「博愛」「思いやり」"
+                stock.innerHTML = "在庫数：30本"
+            }
+            if (productName.textContent == 'バラ') {
+                productImg.setAttribute('src', '../assets/img/バラ.png')
+                description.innerHTML = "花の女王とされる、フラワーギフトの王道です。通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、「あなたを愛しています」「愛情」「美」「情熱」"
+                stock.innerHTML = "在庫数：10本"
+            }
+            if (productName.textContent == 'ヒマワリ') {
+                productImg.setAttribute('src', '../assets/img/ヒマワリ.png')
+                description.innerHTML = "夏を代表するお花で、性別や年代を問わず親しまれています。旬の時期は、6~9月ごろです。<br>花言葉は、	「あなただけを見つめている」「愛慕」「崇拝」「熱愛」"
+                stock.innerHTML = "在庫数：10本"
+            }
+            if (productName.textContent == 'ユリ') {
+                productImg.setAttribute('src', '../assets/img/ユリ.png')
+                description.innerHTML = "大輪で豪華なユリの花は、風が吹くと花が揺れるので、その様子から「ユリ」という名前が付きました。通年流通しているので、どの季節でもご購入いただけます。<br>花言葉は、	「純粋」「無垢」「威厳」"
+                stock.innerHTML = "在庫数：10本"
+            }
+            productImgParag.appendChild(productImg);
+            productArea.insertBefore(productImgParag, description);
+        </script>
+    </body>
+</html>

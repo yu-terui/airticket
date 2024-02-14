@@ -7,7 +7,7 @@ const app = express(); //インスタンス化してappに代入
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set("view engine", "ejs");//テンプレートエンジンをEJSに
+app.set("view engine", "ejs"); //テンプレートエンジンをEJSに
 
 const mysql = require("mysql2");
 
@@ -15,101 +15,116 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "rootroot",
-  database: "products",
+  database: "ECdb",
 });
 // cssファイルの取得
-app.use(express.static("assets"));
+app.use("/assets", express.static("assets"));
+
+// favicon.icoがリクエストされた場合、空のレスポンスを返す。
+app.get("/favicon.ico", (req, res) => {
+  res.status(204);
+});
+
+//テーブル作成
+con.connect(function(err) {
+  if (err) throw err;
+	console.log('Connected');
+  let sql = "create table if not exists cart (name varchar(45), price INT)";
+  con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      console.log("table created")
+  });
+});
+con.connect(function(err) {
+  if (err) throw err;
+	console.log('Connected');
+  let sql = "create table if not exists newusers (id INT auto_increment not null,userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));";
+  con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      console.log("table created")
+  });
+});
 
 // mysqlからデータを持ってくる
 app.get("/", (req, res) => {
-  const sql = "select * from personas";
+  const sql =
+    "select * from products left join review on review.itemId = products.id";
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     res.render("index", {
-      filteredPersonas: result,
-      order: "",
-      search: ""
+      products: result,
+      reviews: result,
     });
   });
 });
-
-//新規追加
-//データベースを変更したいときはpost
-app.post("/", (req, res) => {
-  const sql = "INSERT INTO personas SET ?";
-  con.query(sql, req.body, function (err, result, fields) {//query＝SQLの実行
+app.get("/products/:name", (req, res) => {
+  const sql =
+    "select * from products left join review on review.itemId = products.id where name = ?";
+  con.query(sql, req.params.name, function (err, result, fields) {
     if (err) throw err;
-    console.log(result);
+    res.render("products", {
+      products: result,
+      reviews: result,
+      data: result,
+    });
+  });
+});
+app.get("/cart", (req, res) => {
+  let sql = "SELECT * FROM `cart` WHERE name = '' OR name IS NULL";
+  con.query(sql, function (err, result, fields) {
+    if (err) {
+      return req.params;
+    } else {
+      const sql = "select * from cart";
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.render("cart", {
+          cart: result,
+          data: result,
+        });
+      });
+    }
+  });
+});
+app.post("/addCart/:name", (req, res) => {
+  const sql = "insert into cart (name, price) values(?, ?)";
+  con.query(sql, [req.body.name, req.body.price], function (err, result) {
+    if (err) throw err;
     res.redirect("/");
   });
 });
-
-app.get("/edit/:id", (req, res) => {
-  //getでデータ取得
-  //編集画面へ遷移するために、id=？の行のデータを取得
-  const sql = "SELECT * FROM personas WHERE id = ?";
-  con.query(sql, [req.params.id], function (err, result, fields) {
+app.post("/deleteItem/:name", (req, res) => {
+  const sql = "delete from cart where name = ?";
+  con.query(sql, req.params.name, function (err, result) {
     if (err) throw err;
-    res.render("edit", {
-      personas: result,
-    });
+    res.redirect("/");
   });
 });
-app.post("/update/:id", (req, res) => {
-  //データベースを変更したいときはpost
-  //編集画面にて、データの更新
-  const sql = "UPDATE personas SET ? WHERE id = " + req.params.id;
+app.get("/register", (req, res) => {
+  // 'create table newusers (id INT auto_increment not null, userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));'
+  res.render("register");
+});
+app.post("/confirm", (req, res) => {
+  let data = req.body;
+  res.render("confirm", {
+    userName: data.userName,
+    furigana: data.furigana,
+    address: data.address,
+    email: data.email,
+    password: data.password,
+  });
+});
+app.post("/complete", (req, res) => {
+  let data = req.body;
+  const sql = "insert into newusers set ?";
   con.query(sql, req.body, function (err, result, fields) {
     if (err) throw err;
-    console.log(result);
-    res.redirect("/");
-    //フォーム送信後の遷移場所＝action="/update/"だが、redirect("/")なので、元のページに戻る仕組み
-  });
-});
-
-//ソート・絞り込み
-app.get("/:filter", (req, res) => {
-  let order = ""
-  let search = ""
-  let orderQuery = ""
-  let searchQuery = ""
-  let filteredPersonas = []
-  const filter = req.params.filter.split("+")
-
-  // ソート・絞り込みの選択肢が格納されている分だけ処理繰り返し
-  filter.forEach((element) => {
-    //ソート
-    if (element.indexOf("order") > -1) {
-      // order=rating:ascという形から=の後の記述のみ取得
-      const selectOrder = element.slice(element.indexOf("=") + 1)
-      if (element.indexOf("rating") > -1) {
-        //ascという形のみ取得
-        let order = selectOrder.slice(selectOrder.indexOf(":") + 1)
-        if (order !== "base") orderQuery = `ORDER BY rating ${order}`
-      }
-      else if (selectOrder === "base") order = "base"
-    }
-    //絞り込み
-    else if (element.indexOf("search") > -1) {
-      // search=rating:1という形から=の後の記述のみ取得
-      const selectSearch = element.slice(element.indexOf("=") + 1)
-      if (element.indexOf("rating") > -1) {
-        //1という形のみ取得
-        search = selectSearch.slice(selectSearch.indexOf(":") + 1)
-        if (search !== "base") searchQuery = `WHERE rating = ${search}`
-      }
-      else if (selectSearch === "base") search = "base"
-    }
-  });
-  // 検索結果を反映した情報を取得
-  sql = `SELECT * FROM personas ${searchQuery} ${orderQuery}`;
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-    // ソートされたユーザー情報と順番の情報を返す
-    res.render("index", {
-      filteredPersonas: result,
-      order: order,
-      search: search
+    res.render("complete", {
+      userName: data.userName,
+      furigana: data.furigana,
+      address: data.address,
+      email: data.email,
+      password: data.password,
     });
   });
 });

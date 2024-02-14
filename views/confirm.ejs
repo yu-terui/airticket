@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>EC Store - 登録情報確認</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+                <ul>
+                    <li><a href="/"><img src="../assets/img/花アイコン.png" alt="花アイコン"></a></li>
+                <li><a href="/register"><img src="../assets/img/人型アイコン.png" alt="人型アイコン"></a></li>
+                    <li><a href="/cart"><img src="../assets/img/カート.png" alt="カート"></a></li>
+                </ul>
+        </header>
+        <main>
+            <div class="container">
+                <h1>登録情報の確認</h1>
+                <form id="confirm" action="/complete" method="post">
+                    <p>内容にお間違いがなければ、登録ボタンを押してください。</p>
+                    <dl>
+                        <dt id="userName">お名前：</dt>
+                        <dd><input type="text" value="<%= userName %>" name="userName"></dd>
+                    </dl>
+                    <dl>
+                        <dt id="furigana">ふりがな：</dt>
+                        <dd><input type="text" value="<%= furigana %>" name="furigana"></dd>
+                    </dl>
+                    <dl>
+                        <dt id="address">住所：</dt>
+                        <dd><input type="text" value="<%= address %>" name="address"></dd>
+                    </dl>
+                    <dl>
+                        <dt id="email">メールアドレス：</dt>
+                        <dd><input type="text" value="<%= email %>" name="email"></dd>
+                    </dl>
+                    <dl>
+                        <dt id="password">パスワード：</dt>
+                        <dd><input type="text" value="<%= password %>" name="password"></dd>
+                    </dl>
+                    <button id="register_btn">登録する</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 EBA All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
