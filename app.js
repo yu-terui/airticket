@@ -15,7 +15,7 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "rootroot",
-  database: "ECdb",
+  database: "ecdb",
 });
 // cssファイルの取得
 app.use("/assets", express.static("assets"));
