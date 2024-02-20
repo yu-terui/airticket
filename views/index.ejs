@@ -9,9 +9,10 @@
     <body>
         <header>
             <ul>
-                <li><a href="/"><img src="../assets/img/花アイコン.png" alt="花アイコン"></a></li>
-                <li><a href="/register"><img src="../assets/img/人型アイコン.png" alt="人型アイコン"></a></li>
-                <li><a href="/cart"><img src="../assets/img/カート.png" alt="カート"></a></li>
+                <li><a href="/"><img src="../assets/img/アイコン_花.png" alt="アイコン_花"></a></li>
+                <li><a href="/register"><img src="../assets/img/アイコン_ユーザー.png" alt="アイコン_ユーザー"></a></li>
+                <li><a href="/cart"><img src="../assets/img/アイコン_カート.png" alt="アイコン_カート"></a></li>
+                <li><a href="/login"><img src="../assets/img/アイコン_管理画面.png" alt="アイコン_管理画面"></a></li>
             </ul>
         </header>
         <main>
@@ -123,6 +124,7 @@
                     rateStar.classList.add("rateStar")
                     total.classList.add("total")
                     //商品情報を受け取る
+                    productImg.setAttribute('src', `../assets/img/${data.image}`)
                     productName.innerHTML = `商品名：${data.name}`
                     productPrice.innerHTML = `(税込${data.price}円)`
                     //商品情報表示領域の完成
@@ -154,52 +156,42 @@
                     }
                     //値に応じた写真・平均値・総数の挿入
                     if (data.name == 'アジサイ') {
-                        productImg.setAttribute('src', '../assets/img/アジサイ.png')
                         insert(1)
                         rateStarStyle("--score:2.5")
                     }
                     if (data.name == 'アネモネ') {
-                        productImg.setAttribute('src', '../assets/img/アネモネ.png')
                         insert(2)
                         rateStarStyle("--score:3.25")
                     }
                     if (data.name == 'カスミソウ') {
-                        productImg.setAttribute('src', '../assets/img/カスミソウ.png')
                         insert(3)
                         rateStarStyle("--score:3.5")
                     }
                     if (data.name == 'カーネーション') {
-                        productImg.setAttribute('src', '../assets/img/カーネーション.png')
                         insert(4)
                         rateStarStyle("--score:3.33")
                     }
                     if (data.name == 'ガーベラ') {
-                        productImg.setAttribute('src', '../assets/img/ガーベラ.png')
                         insert(5)
                         rateStarStyle("--score:4.5")
                     }
                     if (data.name == 'キク') {
-                        productImg.setAttribute('src', '../assets/img/キク.png')
                         insert(6)
                         rateStarStyle("--score:3.5")
                     }
                     if (data.name == 'チューリップ') {
-                        productImg.setAttribute('src', '../assets/img/チューリップ.png')
                         insert(7)
                         rateStarStyle("--score:4.5")
                     }
                     if (data.name == 'バラ') {
-                        productImg.setAttribute('src', '../assets/img/バラ.png')
                         insert(8)
                         rateStarStyle("--score:2.5")
                     }
                     if (data.name == 'ヒマワリ') {
-                        productImg.setAttribute('src', '../assets/img/ヒマワリ.png')
                         insert(9)
                         rateStarStyle("--score:3.5")
                     }
                     if (data.name == 'ユリ') {
-                        productImg.setAttribute('src', '../assets/img/ユリ.png')
                         insert(10)
                         rateStarStyle("--score:3.66")
                     }

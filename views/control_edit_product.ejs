@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>EC Store - 管理者画面</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="control_edit">
+        <header>
+            <ul>
+                <li><a href="/"><img src="../assets/img/アイコン_花.png" alt="アイコン_花"></a></li>
+                <li><a href="/register"><img src="../assets/img/アイコン_ユーザー.png" alt="アイコン_ユーザー"></a></li>
+                <li><a href="/cart"><img src="../assets/img/アイコン_カート.png" alt="アイコン_カート"></a></li>
+                <li><a href="/login"><img src="../assets/img/アイコン_管理画面.png" alt="アイコン_管理画面"></a></li>
+            </ul>
+            <nav>
+                <ul>
+                    <li>管理者画面 > </li>
+                    <li><a href="/control_register">商品管理</a></li>
+                    <li>|</li>
+                    <li><a href="/control_edit">商品編集</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container">
+                <form id="control_edit_product" action="/update/<%= products[0].id %>" method="post" enctype="multipart/form-data">
+                    <label for="name">商品名</label><input type="text" id="name" name="name" value="<%= products[0].name %>">
+                    <p id="name_alert"></p>
+                    <label for="imageFile">商品画像</label><input type="file" id="imageFile" name="imageFile" accept="image/png,image/jpeg">
+                    <input id="image" name="image" value="<%= products[0].image %>" >
+                    <div id="figure" style="display:none"><img id="uploadedImg" style="width:200px"></div>
+                    <label for="description">商品説明</label><textarea type="text" id="description" name="description" rows="5"><%= products[0].description %></textarea>
+                    <p id="description_alert"></p>
+                    <label for="price">販売価格</label><input type="text" id="price" name="price" value="<%= products[0].price %>">
+                    <p id="price_alert"></p>
+                    <label for="stock">在庫数</label><input type="text" id="stock" name="stock" value="<%= products[0].stock %>">
+                    <p id="stock_alert"></p>
+                    <button type="submit" id="editBtn">編集完了</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 EBA All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+            //商品画像のプレビュー表示
+            let imageFile = document.querySelector("#imageFile")
+            let figure = document.querySelector("#figure")
+            let uploadedImg = document.querySelector("#uploadedImg")
+            //画像ファイル
+            imageFile.addEventListener('change', (event) => {
+                let [file] = event.target.files
+                if (file) {
+                    uploadedImg.setAttribute('src', URL.createObjectURL(file))
+                    figure.style.display = 'block'
+                } else {
+                    figure.style.display = 'none'
+                }
+                // 画像パスの取得
+                let imageFile = document.getElementById("imageFile");
+                let str = imageFile.value.split('\\');
+                for (i = 0; i < str.length; i++) {
+                    image.value = str[2];
+                }
+            });
+            let editBtn = document.querySelector("#editBtn");
+            editBtn.addEventListener("click", function (event) {
+                //ID取得
+                let name = document.getElementById("name");
+                let description = document.getElementById("description");
+                let price = document.getElementById("price");
+                let stock = document.getElementById("stock");
+                //alert文
+                let name_alert = document.getElementById("name_alert");
+                let description_alert = document.getElementById("description_alert");
+                let price_alert = document.getElementById("price_alert");
+                let stock_alert = document.getElementById("stock_alert");
+                //name
+                if (!name.value) {
+                    name_alert.textContent = "入力してください";
+                    name_alert.style.color = "#f00";
+                    name.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    name_alert.textContent = ""
+                    name.style.borderColor = "#333"
+                }
+                //description
+                if (!description.value) {
+                    description_alert.textContent = "入力してください";
+                    description_alert.style.color = "#f00";
+                    description.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    description_alert.textContent = ""
+                    description.style.borderColor = "#333"
+                }
+                //price
+                if (price.value.match(/[^0-9]/)) {
+                    price_alert.textContent = "数字のみを入力してください";
+                    price_alert.style.color = "#f00";
+                    price.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!price.value) {
+                    price_alert.textContent = "入力してください";
+                    price_alert.style.color = "#f00";
+                    price.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    price_alert.textContent = ""
+                    price.style.borderColor = "#333"
+                }
+                //stock
+                if (stock.value.match(/[^0-9]/)) {
+                    stock_alert.textContent = "数字のみを入力してください";
+                    stock_alert.style.color = "#f00";
+                    stock.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!stock.value) {
+                    stock_alert.textContent = "入力してください";
+                    stock_alert.style.color = "#f00";
+                    stock.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    stock_alert.textContent = ""
+                    stock.style.borderColor = "#333"
+                }
+                if (
+                    name_alert.textContent == "" &&
+                    description_alert.textContent == "" &&
+                    price_alert.textContent == "" &&
+                    stock_alert.textContent == ""
+                ) {
+                    alert("商品情報を編集しました")
+                }
+            });
+        </script>
+    </body>
+</html>

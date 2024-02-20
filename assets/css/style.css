@@ -1,6 +1,7 @@
 /* 共通 */
 body {
   background: beige;
+  color: #333;
 }
 .container {
   width: 768px;
@@ -19,7 +20,7 @@ header ul {
   z-index: 100;
 }
 main {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 p,
 img {
@@ -116,7 +117,7 @@ dd {
   color: #ffb906;
   width: calc(var(--score) * 20px);
 }
-@media screen and (max-width: 768px) {
+@media screenbutton and (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -156,4 +157,76 @@ dd {
 }
 #cartArea .sumParag {
   font-size: 120%;
+}
+/* login */
+#login input {
+  display: block;
+  margin: auto;
+  padding: 5px;
+  width: 50%;
+}
+/* control_register */
+/* control_edit */
+nav {
+  background:tan;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}
+nav ul {
+  width: 768px;
+  margin: auto;
+  padding: 5px;
+  font-size: 120%;
+  z-index: 98;
+}
+nav ul li {
+  padding: 0 5px;
+}
+nav ul li a{
+  color: #333;
+}
+body#control_register nav ul li:nth-of-type(2) a{
+  color:#fff;
+  border-bottom: 2px solid #fff;
+}
+body#control_edit nav ul li:nth-of-type(4) a{
+  color:#fff;
+  border-bottom: 2px solid #fff;
+}
+#control_register main,
+#control_edit main{
+padding-top: 100px;
+}
+/* control_register */
+#control_register input,
+#control_register textarea,
+#control_edit input,
+#control_edit textarea {
+  display: block;
+  margin: auto;
+  margin-bottom: 20px;
+  padding: 5px;
+  width: 50%;
+}
+/* control_edit */
+#control_edit .grid img{
+  width: 200px;
+}
+#control_edit .name a{
+  color: coral;
+  border-bottom: 1.5px solid coral;
+  padding: 0 5px;
+  font-size: 110%;
+}
+#control_edit .name a:hover{
+  font-weight: bold;
+  cursor: pointer;
+}
+#control_edit_product img{
+  width: 200px;
+}
+
+#uploadedImg{
+  padding-bottom: 30px;
 }
