@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - 会員登録</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="member_register">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_login">ログイン</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <h2>新規会員登録</h2>
+                <form action="/member_register_complete">
+                    <label for="familyname">お名前（姓）</label><input type="text" id="familyname" name="familyname" placeholder="例：ヤマダ">
+                    <label for="firstname">お名前（名）</label><input type="text" id="firstname" name="firstname" placeholder="例：タロウ">
+                    <label for="age">ご年齢</label><input type="text" id="age" name="age" placeholder="例：25">
+                    <input type="radio" value="male" id="male" name="sex"><label for="male">男性</label>
+                    <input type="radio" value="female" id="female" name="sex"><label for="female">女性</label>
+                    <label for="email">メールアドレス</label><input type="text" id="email" name="email" placeholder="例：example@example.com">
+                    <label for="password">パスワード</label><input type="password" id="password" name="password" placeholder="">
+                    <button>登録</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

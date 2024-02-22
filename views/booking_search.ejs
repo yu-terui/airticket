@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - 予約検索</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="booking_search">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_login">ログイン</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <form id="members" action="/booking_check" method="get">
+                    <h2>会員の方</h2>
+                    <div class="grid_2">
+                        <div><label for="customer_number">お客様番号</label><input type="text" id="customer_number" placeholder="例：12345"></div>
+                        <div><label for="password">パスワード</label><input type="password" id="password" placeholder=""></div>
+                    </div>
+                    <button>ログイン</button>
+                </form>
+                <form id="non_members" action="/booking_check" method="get">
+                    <h2>一般の方</h2>
+                    <div class="grid_2">
+                        <div><label for="flight_date">搭乗日</label><input type="date" name="flight_date" id="flight_date"></div>
+                        <div><label for="flight_number">便名</label><input type="text" name="flight_number" id="flight_number" placeholder="例：XYZ100"></div>
+                        <div><label for="customer_name">搭乗者：名</label><input type="text" name="customer_familyname" id="customer_familyname" placeholder="例：ヤマダ"></div>
+                        <div><label for="customer_name">搭乗者：姓</label><input type="text" name="customer_firstname" id="customer_firstname" placeholder="例：タロウ"></div>
+                    </div>
+                    <button>検索</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

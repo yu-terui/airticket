@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - チケット選択</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="ticket_select">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_login">ログイン</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <form action="/ticket_check" method="get">
+                    <div class="grid_2">
+                        <div id="table_area">
+                            <h2>前ぺ－ジの情報</h2>
+                            <p>2024年3月1日</p>
+                            <p>大阪(関西)→東京(羽田)</p>
+                            <table>
+                                <tr>
+                                    <th> </th>
+                                    <th>フレックス</th>
+                                    <th>バリュー</th>
+                                    <th>ビジネス</th>
+                                </tr>
+                                <tr>
+                                    <th>7:00-8:00<br>XYZ100</th>
+                                    <td><a href="">30,000<br>〇</a></td>
+                                    <td><a href="">10,000<br>〇</a></td>
+                                    <td><a href="">20,000<br>〇</a></td>
+                                </tr>
+                                <tr>
+                                    <th>7:00-8:00<br>XYZ100</th>
+                                    <td><a href="">30,000<br>〇</a></td>
+                                    <td><a href="">10,000<br>〇</a></td>
+                                    <td><a href="">20,000<br>〇</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="selected">
+                            <h3>選択中のチケット</h3>
+                            <p>日にち</p>
+                            <p>東京11:00→大阪→12:00</p>
+                            <p>XYZ100</p>
+                            <p>大人1名</p>
+                            <p id="total">合計 10,000円</p>
+                        </div>
+                    </div>
+                    <button>確認画面へ</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

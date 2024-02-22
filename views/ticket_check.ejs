@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - チケット確認</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="ticket_check">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_login">ログイン</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <table>
+                    <tr>
+                        <th colspan="2">旅程</th>
+                        <th>便名</th>
+                        <th>クラス</th>
+                        <th>運賃</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>日にち</td>
+                        <td>7:00 東京<br>8:00 大阪</td>
+                        <td>XYZ302</td>
+                        <td>普通席</td>
+                        <td>バリュー</td>
+                        <td><button>削除</button></td>
+                    </tr>
+                </table>
+                <p id="total">合計：10,000円</p>
+                <p class="button"><a href="/member_login">会員ログインして次へ</a></p>
+                <p class="button"><a href="/booking_info">会員ログインせず次へ</a></p>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

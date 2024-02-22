@@ -21,7 +21,7 @@ const con = mysql.createConnection({
 // cssファイルの取得
 app.use("/assets", express.static("assets"));
 
-//アップロードされた画像をローカルに保存
+// アップロードされた画像をローカルに保存
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -67,138 +67,31 @@ app.get("/", (req, res) => {
     });
   });
 });
-app.get("/products/:name", (req, res) => {
-  const sql =
-    "select * from products left join review on review.itemId = products.id where name = ?";
-  con.query(sql, req.params.name, function (err, result, fields) {
-    if (err) throw err;
-    res.render("products", {
-      products: result,
-      reviews: result,
-      data: result,
-    });
-  });
+app.get("/booking_search", (req, res) => {
+    res.render("booking_search");
 });
-app.get("/cart", (req, res) => {
-  let sql = "SELECT * FROM cart WHERE name = ''";
-  con.query(sql, function (err, result, fields) {
-    if (err) {
-      return req.params;
-    } else {
-      const sql = "select * from cart";
-      con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        res.render("cart", {
-          cart: result,
-          data: result,
-        });
-      });
-    }
-  });
+app.get("/booking_check", (req, res) => {
+    res.render("booking_check");
 });
-app.post("/addCart/:name", (req, res) => {
-  const sql = "insert into cart (name, price, image) values(?, ?, ?)";
-  con.query(
-    sql,
-    [req.body.name, req.body.price, req.body.image],
-    function (err, result) {
-      if (err) throw err;
-      res.redirect("/");
-    }
-  );
+app.get("/booking_info", (req, res) => {
+    res.render("booking_info");
 });
-app.post("/deleteItem/:name", (req, res) => {
-  const sql = "delete from cart where name = ?";
-  con.query(sql, req.params.name, function (err, result) {
-    if (err) throw err;
-    res.redirect("/");
-  });
+app.post("/booking_confirm", (req, res) => {
+    res.render("booking_confirm");
 });
-app.get("/register", (req, res) => {
-  res.render("register");
+app.get("/ticket_select", (req, res) => {
+    res.render("ticket_select");
 });
-app.post("/confirm", (req, res) => {
-  let data = req.body;
-  res.render("confirm", {
-    userName: data.userName,
-    furigana: data.furigana,
-    address: data.address,
-    email: data.email,
-    password: data.password,
-  });
+app.get("/ticket_check", (req, res) => {
+    res.render("ticket_check");
 });
-app.post("/complete", (req, res) => {
-  let data = req.body;
-  const sql = "insert into newusers set ?";
-  con.query(sql, req.body, function (err, result, fields) {
-    if (err) throw err;
-    res.render("complete", {
-      userName: data.userName,
-      furigana: data.furigana,
-      address: data.address,
-      email: data.email,
-      password: data.password,
-    });
-  });
+app.get("/member_login", (req, res) => {
+    res.render("member_login");
 });
-app.get("/login", (req, res) => {
-  const sql = "select * from login";
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-    res.render("login", {
-      login: result,
-    });
-  });
+app.get("/member_register", (req, res) => {
+    res.render("member_register");
 });
-app.get("/control_register", (req, res) => {
-  res.render("control_register");
-});
-//アップロードされたファイルの保存のため、input要素のname="imageFile"を指定
-app.post("/control_register", upload.single("imageFile"), (req, res) => {
-  const sql = "insert into products set ?";
-  con.query(sql, req.body, function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-    res.redirect("control_register");
-  });
-});
-app.get("/control_edit", (req, res) => {
-  const sql = "select * from products";
-  con.query(sql, req.params, function (err, result, fields) {
-    if (err) throw err;
-    res.render("control_edit", {
-      products: result,
-      data: result,
-    });
-  });
-});
-app.get("/control_edit_product/:name", (req, res) => {
-  const sql = "select * from products where name = ?";
-  con.query(sql, req.params.name, function (err, result, fields) {
-    if (err) throw err;
-    res.render("control_edit_product", {
-      products: result,
-      data: result,
-    });
-  });
-});
-//アップロードされたファイルの保存のため、input要素のname="imageFile"を指定
-app.post("/update/:id", upload.single("imageFile"), (req, res) => {
-  const sql = "update products set ? where id = " + req.params.id;
-  con.query(sql, req.body, function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-    res.redirect("control_edit");
-  });
-});
-app.get("/update/control_edit", (req, res) => {
-  const sql = "select * from products";
-  con.query(sql, req.params, function (err, result, fields) {
-    if (err) throw err;
-    res.render("control_edit", {
-      products: result,
-      data: result,
-    });
-  });
+app.get("/member_register_complete", (req, res) => {
+    res.render("member_register_complete");
 });
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

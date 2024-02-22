@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - 情報入力</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="booking_info">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_login">ログイン</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <div id="form_area">
+                    <form action="/booking_confirm" method="post">
+                        <div class="grid_2">
+                            <div id="infos">
+                                <div id="customer_info">
+                                    <h2>搭乗者情報</h2>
+                                    <table>
+                                        <tr>
+                                            <th></th>
+                                            <th>搭乗者：姓</th>
+                                            <th>搭乗者：名</th>
+                                            <th>年齢</th>
+                                            <th>性別</th>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input type="text" name="familyname" id="familyname" placeholder="例：ヤマダ"></td>
+                                            <td><input type="text" name="firstname" id="firstname" placeholder="例：タロウ"></td>
+                                            <td><input type="text" name="age" id="age" placeholder="例：25">歳 </td>
+                                            <td>
+                                                <input type="radio" name="sex" id="male" value="male" selected><label for="male">男性</label>
+                                                <br>
+                                                <input type="radio" name="sex" id="female" value="female"><label for="felame">女性</label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="contact_info">
+                                    <h2>連絡先情報</h2>
+                                    <table>
+                                        <tr>
+                                            <th>電話番号</th>
+                                            <td>
+                                                <select name="phone" id="phone">
+                                                    <option value="mobile">携帯</option>
+                                                    <option value="home">自宅</option>
+                                                    <option value="company">会社</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="text" placeholder="例：09011112222"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>メールアドレス</th>
+                                            <td>
+                                                <select name="who" id="who">
+                                                    <option value="1">搭乗者1</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="text" name="email" id="email" placeholder="例：example@example.com"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="selected">
+                                <h3>選択中のチケット</h3>
+                                <p>日にち</p>
+                                <p>東京11:00→大阪→12:00</p>
+                                <p>XYZ100</p>
+                                <p>大人1名</p>
+                                <p id="total">合計 10,000円</p>
+                            </div>
+                        </div>
+                        <button>ご予約を確定する</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
