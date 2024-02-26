@@ -31,7 +31,6 @@
                                 <option value="departure_spot" disabled selected>出発地を選ぶ</option>
                                 <option value="departure_tokyo">東京(羽田)</option>
                                 <option value="departure_osaka">大阪(関西)</option>
-                                <option value="departure_nagoya">名古屋(中部)</option>
                             </select>
                         </div>
                         <div id="airplane">
@@ -41,7 +40,6 @@
                                 <option value="arrival_spot" disabled selected>到着地を選ぶ</option>
                                 <option value="arrival_tokyo">東京(羽田)</option>
                                 <option value="arrival_osaka">大阪(関西)</option>
-                                <option value="arrival_nagoya">名古屋(中部)</option>
                             </select>
                         </div>
                     </div>
@@ -61,10 +59,6 @@
                                 <option value="3">3人</option>
                                 <option value="4">4人</option>
                                 <option value="5">5人</option>
-                                <option value="6">6人</option>
-                                <option value="7">7人</option>
-                                <option value="8">8人</option>
-                                <option value="9">9人</option>
                             </select>
                         </div>
                     </div>
@@ -85,6 +79,7 @@
             </div>
         </footer>
         <script type="text/javascript">
+            const flights = JSON.parse('<%= JSON.stringify(flights) %>'.replace(/&#34;/g, '"'));
             let search_btn = document.getElementById("search_btn");
             let departure = document.querySelector('[name="departure"]');
             let arrival = document.querySelector('[name="arrival"]');
@@ -96,8 +91,7 @@
                 if
                     (
                     (departure.value == 'departure_tokyo') && (arrival.value == 'arrival_tokyo') ||
-                    (departure.value == 'departure_osaka') && (arrival.value == 'arrival_osaka') ||
-                    (departure.value == 'departure_nagoya') && (arrival.value == 'arrival_nagoya')
+                    (departure.value == 'departure_osaka') && (arrival.value == 'arrival_osaka')
                     ) {
                     spot_alert.textContent = "出発地と到着地は同じ場所にできません。"
                     spot_alert.style.color = "#f00"

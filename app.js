@@ -15,55 +15,31 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "rootroot",
-  database: "ecdb",
+  database: "airline",
 });
 
 // cssファイルの取得
 app.use("/assets", express.static("assets"));
-
-// アップロードされた画像をローカルに保存
-const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "assets/img/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
 
 //テーブル作成
 con.connect(function (err) {
   if (err) throw err;
   console.log("Connected");
   let sql =
-    "create table if not exists cart (name varchar(45), price INT, image varchar(45))";
+    "create table if not exists members (id INT auto_increment not null,userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));";
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     console.log("table created");
   });
 });
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected");
-  let sql =
-    "create table if not exists newusers (id INT auto_increment not null,userName varchar(45),furigana varchar(45),address varchar(45),email varchar(45),password varchar(45),primary key(id));";
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-    console.log("table created");
-  });
-});
-
 // mysqlからデータを持ってくる
 app.get("/", (req, res) => {
   const sql =
-    "select * from products left join review on review.itemId = products.id";
+    "select * from flights";
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
     res.render("index", {
-      products: result,
-      reviews: result
+      flights: result
     });
   });
 });
@@ -89,6 +65,9 @@ app.get("/member_login", (req, res) => {
     res.render("member_login");
 });
 app.get("/member_register", (req, res) => {
+    res.render("member_register");
+});
+app.post("/member_register", (req, res) => {
     res.render("member_register");
 });
 app.get("/member_register_complete", (req, res) => {
