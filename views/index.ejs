@@ -23,23 +23,23 @@
         </header>
         <main>
             <div class="container">
-                <form action="/ticket_select" method="get">
+                <form action="/ticket_select/:departure" method="post" id="form">
                     <h2>予約</h2>
                     <div class="grid_3">
                         <div>
                             <select name="departure" id="departure">
-                                <option value="departure_spot" disabled selected>出発地を選ぶ</option>
-                                <option value="departure_tokyo">東京(羽田)</option>
-                                <option value="departure_osaka">大阪(関西)</option>
+                                <option disabled selected>出発地を選ぶ</option>
+                                <option value="東京（羽田）">東京(羽田)</option>
+                                <option value="大阪（関西）">大阪(関西)</option>
                             </select>
                         </div>
                         <div id="airplane">
                         </div>
                         <div>
                             <select name="arrival" id="arrival">
-                                <option value="arrival_spot" disabled selected>到着地を選ぶ</option>
-                                <option value="arrival_tokyo">東京(羽田)</option>
-                                <option value="arrival_osaka">大阪(関西)</option>
+                                <option disabled selected>到着地を選ぶ</option>
+                                <option value="東京（羽田）">東京(羽田)</option>
+                                <option value="大阪（関西）">大阪(関西)</option>
                             </select>
                         </div>
                     </div>
@@ -79,6 +79,7 @@
             </div>
         </footer>
         <script type="text/javascript">
+        // データ取得
             const flights = JSON.parse('<%= JSON.stringify(flights) %>'.replace(/&#34;/g, '"'));
             let search_btn = document.getElementById("search_btn");
             let departure = document.querySelector('[name="departure"]');
@@ -86,6 +87,7 @@
             let spot_alert = document.getElementById("spot_alert");
             let people = document.querySelector('[name="people"]');
             let people_alert = document.getElementById("people_alert");
+            // 検索ボタン
             search_btn.addEventListener("click", function (event) {
             // departure, arrival
                 if
@@ -107,7 +109,7 @@
                 } else{
                     spot_alert.textContent=""
                 }
-            //people
+            // people
                 if(people.value == 'non'){
                     people_alert.textContent = "人数を選択してください。"
                     people_alert.style.color = "#f00"
@@ -116,18 +118,18 @@
                     people_alert.textContent=""
                 }
             })
-            // date
+        // 日付コントロール
             let dateValue = document.getElementById("date");
             let today = new Date();
             today.setDate(today.getDate());
             let yyyy = today.getFullYear();
             let mm = ("0" + (today.getMonth() + 1)).slice(-2);
             let dd = ("0" + today.getDate()).slice(-2);
-            //初期値を今日にする
+            // 初期値を今日にする
             dateValue.value = yyyy + '-' + mm + '-' + dd;
-            //昨日以前を選択不可能に
+            // 昨日以前を選択不可能に
             dateValue.setAttribute("min", yyyy + '-' + mm + '-' + dd)
-            //一か月以上先を選択不可に
+            // 一か月以上先を選択不可に
             let maxDate = new Date();
             today.setDate(maxDate.getDate() + 30);
             let maxyyyy = today.getFullYear();

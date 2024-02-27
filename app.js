@@ -55,8 +55,19 @@ app.get("/booking_info", (req, res) => {
 app.post("/booking_confirm", (req, res) => {
     res.render("booking_confirm");
 });
-app.get("/ticket_select", (req, res) => {
-    res.render("ticket_select");
+app.post("/ticket_select/:departure", (req, res) => {
+  const sql = "SELECT * FROM airline.flights left join tickets on tickets.flight_num = flights.flight_num where departure = ?";
+  let data = req.body;
+  con.query(sql, [req.body.departure], function (err, result, fields) {
+    if (err) throw err;
+  res.render("ticket_select", {
+    flights: result,
+    departure: data.departure,
+    arrival: data.arrival,
+    date: data.date,
+    people: data.people,
+  });
+  });
 });
 app.get("/ticket_check", (req, res) => {
     res.render("ticket_check");

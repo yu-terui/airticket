@@ -3,6 +3,10 @@ body {
   color: #333;
   position: relative;
 }
+p{
+  margin: 0;
+  padding: 0;
+}
 footer{
   line-height: 50px;
   width: 100%;
@@ -59,6 +63,11 @@ h1 a:hover{
 .grid_3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+.grid_4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
 }
 button {
@@ -148,8 +157,20 @@ button:hover {
   height: fit-content;
   margin-bottom: 20px;
 }
+#ticket_select #selected #date,
 #ticket_select #selected #total {
   border-top: 1px solid #333;
+}
+#ticket_select .grid_4{
+  gap:0;
+}
+#ticket_select #table td a{
+  color: #007bff;
+  display: block;
+}
+#ticket_select #table td a:hover{
+background:rgb(187, 235, 251);
+cursor: pointer;
 }
 @media screen and (max-width: 768px) {
   #ticket_select .grid_2 {

@@ -26,37 +26,14 @@
                 <form action="/ticket_check" method="get">
                     <div class="grid_2">
                         <div id="table_area">
-                            <h2>前ぺ－ジの情報</h2>
-                            <p>2024年3月1日</p>
-                            <p>大阪(関西)→東京(羽田)</p>
-                            <table>
-                                <tr>
-                                    <th> </th>
-                                    <th>フレックス</th>
-                                    <th>バリュー</th>
-                                    <th>ビジネス</th>
-                                </tr>
-                                <tr>
-                                    <th>7:00-8:00<br>XYZ100</th>
-                                    <td><a href="">30,000<br>〇</a></td>
-                                    <td><a href="">10,000<br>〇</a></td>
-                                    <td><a href="">20,000<br>〇</a></td>
-                                </tr>
-                                <tr>
-                                    <th>7:00-8:00<br>XYZ100</th>
-                                    <td><a href="">30,000<br>〇</a></td>
-                                    <td><a href="">10,000<br>〇</a></td>
-                                    <td><a href="">20,000<br>〇</a></td>
-                                </tr>
+                            <h2>検索</h2>
+                            <p><%= date %></p>
+                            <p><%= departure %> → <%= arrival %></p>
+                            <table id="table">
                             </table>
                         </div>
                         <div id="selected">
                             <h3>選択中のチケット</h3>
-                            <p>日にち</p>
-                            <p>東京11:00→大阪→12:00</p>
-                            <p>XYZ100</p>
-                            <p>大人1名</p>
-                            <p id="total">合計 10,000円</p>
                         </div>
                     </div>
                     <button>確認画面へ</button>
@@ -69,6 +46,104 @@
             </div>
         </footer>
         <script type="text/javascript">
+            const flights = JSON.parse('<%= JSON.stringify(flights) %>'.replace(/&#34;/g, '"'));
+            let table = document.getElementById("table");
+            // 1行目 th
+            let tr = document.createElement("tr");
+            tr.classList.add("grid_4")
+            function trs1(X) {
+                let th = document.createElement("th");
+                th.innerHTML = X;
+                tr.append(th);
+                table.append(tr);
+            }
+            trs1(" ");
+            trs1("フレックス");
+            trs1("バリュー");
+            trs1("ビジネス");
+            // 2行目以降 td
+            function trs(Y) {
+                // タグ生成
+                let tr_Y = document.createElement("tr");
+                let td_time = document.createElement("td");
+                let td_flex = document.createElement("td");
+                let td_value = document.createElement("td");
+                let td_business = document.createElement("td");
+                //クラス付与
+                tr_Y.classList.add("grid_4", "tr")
+                td_time.classList.add("td_time")
+                // time フォーマット変更
+                for (i = 0; i < flights.length; i++) {
+                    let departure = flights[Y].departure_time.split(':')
+                    let arrival = flights[Y].arrival_time.split(':')
+                    td_time.innerHTML =
+                        `${departure[0].replace(/^0+/, '') + ':' + departure[1]}
+                        -${arrival[0].replace(/^0+/, '') + ':' + arrival[1]}
+                        <br>→XYZ${flights[Y].flight_num}`;
+                }
+                let remaining = (flights[Y].max_passengers - flights[Y].booked_passengers);
+                if (remaining <= 9) {
+                    td_flex.innerHTML = `<a class="add_ticket">${flights[Y].flex}<br>(残り${remaining}席)</a>`
+                    td_value.innerHTML = `<a class="add_ticket">${flights[Y].value}<br>(残り${remaining}席)</a>`
+                    td_business.innerHTML = `<a class="add_ticket">${flights[Y].business}<br>(残り${remaining}席)</a>`
+                } else if (10 <= remaining && remaining < 30) {
+                    td_flex.innerHTML = `<a class="add_ticket">${flights[Y].flex}<br>(△)</a>`
+                    td_value.innerHTML = `<a class="add_ticket">${flights[Y].value}<br>(△)</a>`
+                    td_business.innerHTML = `<a class="add_ticket">${flights[Y].business}<br>(△)</a>`
+                } else {
+                    td_flex.innerHTML = `<a class="add_ticket">${flights[Y].flex}<br>(〇)</a>`
+                    td_value.innerHTML = `<a class="add_ticket">${flights[Y].value}<br>(〇)</a>`
+                    td_business.innerHTML = `<a class="add_ticket">${flights[Y].business}<br>(〇)</a>`
+                }
+                tr_Y.append(td_time, td_flex, td_value, td_business);
+                table.append(tr_Y);
+            }
+            trs(0)
+            trs(1)
+            trs(2)
+            trs(3)
+            // 選択中のチケット
+            let selected = document.getElementById("selected");
+            function tickets(){
+            // タグ生成
+            let date = document.createElement("p");
+            let flight_num = document.createElement("p");
+            let departure = document.createElement("p");
+            let departure_time = document.createElement("p");
+            let arrow = document.createElement("p");
+            let arrival = document.createElement("p");
+            let arrival_time = document.createElement("p");
+            let price = document.createElement("p");
+            let total = document.createElement("p");
+            //ID付与
+            date.setAttribute("id", "date")
+            total.setAttribute("id", "total")
+            //データ挿入
+            date.innerHTML = `<%=date%>`
+            departure.innerHTML = `<%=departure%>`
+            arrow.innerHTML = "↓"
+            arrival.innerHTML = `<%=arrival%>`
+            selected.append(date, flight_num, departure, departure_time, arrow, arrival, arrival_time, total)
+            // クリックされた行の情報を取得
+            let anchor = document.querySelectorAll(".add_ticket");
+            for (i = 0; i < anchor.length; i++) {
+                anchor[i].addEventListener("click", function () {
+                    //aタグの中身を値段・残席に分ける
+                    let price = this.textContent.split("(");
+                    //人数×値段
+                    let people = `<%=Number(people)%>`;
+                    total.innerHTML = "合計：" + `${Number(price[0])}` * people + "円" + "(大人" + people + "名)"
+                    //クリックされた行の時間・便
+                    let grandparent = this.closest(".tr")
+                    let children = grandparent.children[0].textContent;
+                    let timeANDnum = children.split("→")
+                    flight_num.innerHTML = timeANDnum[1]+"便"
+                    let time = timeANDnum[0].split("-")
+                    departure_time.innerHTML = time[0]
+                    arrival_time.innerHTML = time[1]
+                });
+            };}
+            tickets()
         </script>
     </body>
 </html>
