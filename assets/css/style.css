@@ -157,9 +157,12 @@ button:hover {
   height: fit-content;
   margin-bottom: 20px;
 }
-#ticket_select #selected #date,
 #ticket_select #selected #total {
   border-top: 1px solid #333;
+}
+#ticket_select #selected #date,
+#ticket_select #selected #flight_num {
+font-weight: bold;
 }
 #ticket_select .grid_4{
   gap:0;
@@ -196,8 +199,6 @@ cursor: pointer;
   border: 1px solid #ccc;
 }
 #ticket_check #total {
-  border-top: 1px solid #333;
-  padding-top: 20px;
   font-weight: bold;
   font-size: 120%;
 }
@@ -264,6 +265,10 @@ width: 80px;
   background: rgb(187, 235, 251);
   margin-bottom: 20px;
   height: fit-content;
+}
+#booking_info #selected #date,
+#booking_info #selected #flight_num {
+font-weight: bold;
 }
 #booking_info #selected #total {
   border-top: 1px solid #333;

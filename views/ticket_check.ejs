@@ -23,26 +23,50 @@
         </header>
         <main>
             <div class="container">
-                <table>
-                    <tr>
-                        <th colspan="2">旅程</th>
-                        <th>便名</th>
-                        <th>クラス</th>
-                        <th>運賃</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>日にち</td>
-                        <td>7:00 東京<br>8:00 大阪</td>
-                        <td>XYZ302</td>
-                        <td>普通席</td>
-                        <td>バリュー</td>
-                        <td><button>削除</button></td>
-                    </tr>
-                </table>
-                <p id="total">合計：10,000円</p>
-                <p class="button"><a href="/member_login">会員ログインして次へ</a></p>
-                <p class="button"><a href="/booking_info">会員ログインせず次へ</a></p>
+                <form id="table" method="post">
+                    <table>
+                        <tr>
+                            <th colspan="2">旅程</th>
+                            <th>便名</th>
+                            <th>クラス</th>
+                            <th>運賃</th>
+                            <th>人数</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <%= date %>
+                                <input type="hidden" name="date" value="<%= date %>">
+                            </td>
+                            <td>
+                                <%= departure_time %><br>
+                                    <%= departure %><br>
+                                        <%= arrival_time %><br>
+                                            <%= arrival %>
+                                <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                                <input type="hidden" name="departure" value="<%= departure %>">
+                                <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
+                                <input type="hidden" name="arrival" value="<%= arrival %>">
+
+                            </td>
+                            <td>XYZ<%= flight_num %><input type="hidden" name="flight_num" value="<%= flight_num %>">
+                            </td>
+                            <td>普通席</td>
+                            <td>
+                                <%= type %>
+                            </td>
+                            <td>
+                                <%= people %>名
+                                <input type="hidden" name="people" value="<%= people %>">
+                            </td>
+                            <td><button id="delete_btn">削除</button></td>
+                        </tr>
+                    </table>
+                    <p id="total">合計金額：<%= total %>円</p>
+                    <input type="hidden" name="total" value="<%= total %>">
+                    <button formaction="/member_login">会員ログインして次へ</button>
+                    <button formaction="/booking_info">会員ログインせず次へ</button>
+                </form>
             </div>
         </main>
         <footer>
@@ -51,6 +75,16 @@
             </div>
         </footer>
         <script type="text/javascript">
+            let delete_btn = document.getElementById("delete_btn")
+            let table = document.getElementById("table")
+            delete_btn.addEventListener("click", function () {
+                while (table.firstChild) {
+                    table.removeChild(table.firstChild);
+                }
+                deleted = document.createElement("p")
+                deleted.innerHTML = "選択されたチケットを削除しました"
+                table.append(deleted)
+            })
         </script>
     </body>
 </html>
