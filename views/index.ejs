@@ -25,46 +25,39 @@
             <div class="container">
                 <form action="/ticket_select/:departure" method="post" id="form">
                     <h2>予約</h2>
-                    <div class="grid_3">
+                    <div class="grid_2">
                         <div>
                             <select name="departure" id="departure">
-                                <option disabled selected>出発地を選ぶ</option>
-                                <option value="東京（羽田）">東京(羽田)</option>
-                                <option value="大阪（関西）">大阪(関西)</option>
+                                <option value="departure_spot" disabled selected>出発地を選ぶ</option>
+                                <option value="東京(羽田)">東京(羽田)</option>
+                                <option value="大阪(関西)">大阪(関西)</option>
                             </select>
-                        </div>
-                        <div id="airplane">
                         </div>
                         <div>
                             <select name="arrival" id="arrival">
-                                <option disabled selected>到着地を選ぶ</option>
-                                <option value="東京（羽田）">東京(羽田)</option>
-                                <option value="大阪（関西）">大阪(関西)</option>
+                                <option value="arrival_spot" disabled selected>到着地を選ぶ</option>
+                                <option value="東京(羽田)">東京(羽田)</option>
+                                <option value="大阪(関西)">大阪(関西)</option>
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <p id="spot_alert"></p>
-                    </div>
-                    <div class="grid_3">
-                        <div>
-                            <input id="date" name="date" type="date">
+                    <p id="spot_alert"></p>
+                        <div class="grid_2">
+                            <div>
+                                <input id="date" name="date" type="date">
+                            </div>
+                            <div>
+                                <select name="people" id="people">
+                                    <option value="non" disabled selected>人数を選ぶ</option>
+                                    <option value="1">1人</option>
+                                    <option value="2">2人</option>
+                                    <option value="3">3人</option>
+                                    <option value="4">4人</option>
+                                    <option value="5">5人</option>
+                                </select>
+                            </div>
                         </div>
-                        <div></div>
-                        <div>
-                            <select name="people" id="people">
-                                <option value="non" disabled selected>人数を選ぶ</option>
-                                <option value="1">1人</option>
-                                <option value="2">2人</option>
-                                <option value="3">3人</option>
-                                <option value="4">4人</option>
-                                <option value="5">5人</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
                         <p id="people_alert"></p>
-                    </div>
                     <button id="search_btn">検索する</button>
                 </form>
                 <section>
@@ -79,7 +72,7 @@
             </div>
         </footer>
         <script type="text/javascript">
-        // データ取得
+            // データ取得
             const flights = JSON.parse('<%= JSON.stringify(flights) %>'.replace(/&#34;/g, '"'));
             let search_btn = document.getElementById("search_btn");
             let departure = document.querySelector('[name="departure"]');
@@ -89,36 +82,37 @@
             let people_alert = document.getElementById("people_alert");
             // 検索ボタン
             search_btn.addEventListener("click", function (event) {
-            // departure, arrival
+                console.log(departure.value)
+                // departure, arrival
                 if
                     (
-                    (departure.value == 'departure_tokyo') && (arrival.value == 'arrival_tokyo') ||
-                    (departure.value == 'departure_osaka') && (arrival.value == 'arrival_osaka')
-                    ) {
+                    (departure.value == '東京(羽田)') && (arrival.value == '東京(羽田)') ||
+                    (departure.value == '大阪(関西)') && (arrival.value == '大阪(関西)')
+                ) {
                     spot_alert.textContent = "出発地と到着地は同じ場所にできません。"
                     spot_alert.style.color = "#f00"
                     event.preventDefault()
-                } else if(departure.value == 'departure_spot'){
+                } else if (departure.value == 'departure_spot') {
                     spot_alert.textContent = "出発地を選択してください。"
                     spot_alert.style.color = "#f00"
                     event.preventDefault()
-                } else if(arrival.value == 'arrival_spot'){
+                } else if (arrival.value == 'arrival_spot') {
                     spot_alert.textContent = "到着地を選択してください。"
                     spot_alert.style.color = "#f00"
                     event.preventDefault()
-                } else{
-                    spot_alert.textContent=""
+                } else {
+                    spot_alert.textContent = ""
                 }
-            // people
-                if(people.value == 'non'){
+                // people
+                if (people.value == 'non') {
                     people_alert.textContent = "人数を選択してください。"
                     people_alert.style.color = "#f00"
                     event.preventDefault()
-                } else{
-                    people_alert.textContent=""
+                } else {
+                    people_alert.textContent = ""
                 }
             })
-        // 日付コントロール
+            // 日付コントロール
             let dateValue = document.getElementById("date");
             let today = new Date();
             today.setDate(today.getDate());
