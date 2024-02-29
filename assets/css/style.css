@@ -58,7 +58,6 @@ h1 a:hover{
 .grid_2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
 }
 .grid_3 {
   display: grid;
@@ -99,7 +98,7 @@ button:hover {
 }
 @media screen and (max-width: 768px) {
   .container {
-    width: 100%;
+    width: 95%;
   }
 }
 /* index */
@@ -209,10 +208,13 @@ cursor: pointer;
   display: block;
   margin: auto;
 }
-#members {
+#booking_search .grid_2{
+  gap: 20px;
+}
+#booking_search #members {
   padding-bottom: 20px;
 }
-#non_members {
+#booking_search #non_members {
   padding-top: 20px;
   border-top: 1px solid #333;
 }
@@ -221,7 +223,7 @@ cursor: pointer;
   #booking_search input {
     width: 70%;
   }
-  .grid_2 {
+  #booking_search .grid_2 {
     grid-template-columns: 1fr;
     gap: 10px;
   }
@@ -231,17 +233,19 @@ cursor: pointer;
 #booking_info select {
   display: inline-block;
   padding: 10px;
-  width: 150px;
+  width: 120px;
 }
-#booking_info #age{
-width: 80px;
+#booking_info #contact_info_table input{
+  width: 90%;
+}
+#booking_info label{
+  display: block;
 }
 #booking_info table {
   margin: auto;
 }
 #booking_info th {
   text-align: left;
-  padding: 5px 10px;
 }
 #booking_info td {
   padding: 5px 10px;
@@ -274,12 +278,18 @@ font-weight: bold;
   border-top: 1px solid #333;
 }
 @media screen and (max-width: 768px) {
-  #booking_info input:not([type="radio"]),
-  #booking_info select {
-    width: 100px;
-  }
   #booking_info .grid_2 {
     grid-template-columns: 1fr;
+  }
+  #booking_info table{
+    width: 90%;
+  }
+  #booking_info input:not([type="radio"]),
+  #booking_info select {
+    width: 100%;
+  }
+  #booking_info h3 {
+  padding-top: 20px;
   }
   #booking_info #selected {
     width: 70%;

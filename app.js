@@ -67,7 +67,8 @@ app.post("/booking_info", (req, res) => {
 });
 });
 app.post("/booking_confirm", (req, res) => {
-    res.render("booking_confirm");
+  // res.render("booking_confirm");
+  res.send(req.body);
 });
 app.post("/ticket_select/:departure", (req, res) => {
   const sql = "SELECT * FROM airline.flights left join tickets on tickets.flight_num = flights.flight_num where departure = ?";
@@ -101,6 +102,9 @@ app.post("/ticket_check", (req, res) => {
 });
 });
 });
+app.get("/member_login", (req, res) => {
+  res.render("member_login")
+})
 app.post("/member_login", (req, res) => {
   const sql = "SELECT * FROM flights";
   let data = req.body;
