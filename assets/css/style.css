@@ -2,16 +2,17 @@
 body {
   color: #333;
   position: relative;
-}
-p{
-  margin: 0;
-  padding: 0;
+  min-height: 100vh;
 }
 footer{
   line-height: 50px;
   width: 100%;
   position: absolute;
   bottom: 0;
+}
+p{
+  margin: 0;
+  padding: 0;
 }
 main {
   padding-top:20px;
