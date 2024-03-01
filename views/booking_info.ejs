@@ -138,11 +138,10 @@
                     let input_data = document.createElement("input")
                     let data_alert = document.createElement("p")
                     //属性付与
-                    input_data.setAttribute("name", data)
-                    // input_data.setAttribute("id", data)
-                    input_data.classList.add(data)
+                    input_data.setAttribute("name", data + "_" + row_index)
+                    input_data.setAttribute("id", data + "_" + row_index)
                     input_data.setAttribute("placeholder", example)
-                    data_alert.classList.add(data + "_alert")
+                    data_alert.setAttribute("id", data + "_" + row_index + "_alert")
                     //挿入
                     td_data.append(input_data)
                     td_data.append(data_alert)
@@ -150,72 +149,44 @@
                 }
             }
             //contact_info
-                let who = document.getElementById("who");
-                for (let i = 0; i < people; i++) {
-                    let row_index = customer_info_table.rows[i].rowIndex + 1;
-                    let option = document.createElement("option");
-                    option.setAttribute("value", row_index);
-                    option.innerHTML="搭乗者"+row_index;
-                    who.append(option);
-                }
+            let who = document.getElementById("who");
+            for (let i = 0; i < people; i++) {
+                let row_index = customer_info_table.rows[i].rowIndex + 1;
+                let option = document.createElement("option");
+                option.setAttribute("value", row_index);
+                option.innerHTML = "搭乗者" + row_index;
+                who.append(option);
+            }
             //バリデーション機能
             let confirm_btn = document.getElementById("confirm_btn")
-            for (let i = 0; i < people; i++) {
-            let familyname = document.querySelector(".familyname");
-            let firstname = document.querySelector(".firstname");
-            let age = document.querySelector(".age");
-            let phone_num = document.getElementById("phone_num");
-            let email = document.getElementById("email");
-            let familyname_alert = document.querySelector(".familyname_alert");
-            let firstname_alert = document.querySelector(".firstname_alert");
-            let age_alert = document.querySelector(".age_alert");
-            let phone_num_alert = document.getElementById("phone_num_alert");
-            let email_alert = document.getElementById("email_alert");
-            confirm_btn.addEventListener("click", function () {
-                //姓
-                if (familyname.value.match(/[^ァ-ヴー]/)) {
-                    familyname_alert.textContent = "全角カタカナで入力してください";
-                    familyname_alert.style.color = "#f00";
-                    familyname.style.borderColor = "#f00";
-                    event.preventDefault();
-                } else if (!familyname.value) {
-                    familyname_alert.textContent = "入力してください";
-                    familyname_alert.style.color = "#f00";
-                    familyname.style.borderColor = "#f00";
-                    event.preventDefault();
-                } else {
-                    familyname_alert.textContent = "";
-                    familyname.style.borderColor = "#333";
+            confirm_btn.addEventListener("click", function (event) {
+                for (let i = 0; i < people; i++) {
+                    let row_index = customer_info_table.rows[i].rowIndex + 1;
+                    eval("let familyname_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let firstname_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let age_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let familyname_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    eval("let firstname_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    eval("let age_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    let phone_num = document.getElementById("phone_num");
+                    let phone_num_alert = document.getElementById("phone_num_alert");
+                    let email = document.getElementById("email");
+                    let email_alert = document.getElementById("email_alert");
                 }
-                //名
-                if (firstname.value.match(/[^ァ-ヴー]/)) {
-                    firstname_alert.textContent = "全角カタカナで入力してください";
-                    firstname_alert.style.color = "#f00";
-                    firstname.style.borderColor = "#f00";
+                //電話番号
+                if (phone_num.value.match(/[^0-9]/)) {
+                    phone_num_alert.textContent = "数字のみを入力してください";
+                    phone_num_alert.style.color = "#f00";
+                    phone_num.style.borderColor = "#f00";
                     event.preventDefault();
-                } else if (!firstname.value) {
-                    firstname_alert.textContent = "入力してください";
-                    firstname_alert.style.color = "#f00";
-                    firstname.style.borderColor = "#f00";
-                    event.preventDefault();
-                } else {
-                    firstname_alert.textContent = "";
-                    firstname.style.borderColor = "#333";
-                }
-                //年齢
-                if (age.value.match(/[^0-9]/)) {
-                    age_alert.textContent = "数字を入力してください";
-                    age_alert.style.color = "#f00";
-                    age.style.borderColor = "#f00";
-                    event.preventDefault();
-                } else if (!age.value) {
-                    age_alert.textContent = "入力してください";
-                    age_alert.style.color = "#f00";
-                    age.style.borderColor = "#f00";
+                } else if (!phone_num.value) {
+                    phone_num_alert.textContent = "入力してください";
+                    phone_num_alert.style.color = "#f00";
+                    phone_num.style.borderColor = "#f00";
                     event.preventDefault();
                 } else {
-                    age_alert.textContent = "";
-                    age.style.borderColor = "#333";
+                    phone_num_alert.textContent = "";
+                    phone_num.style.borderColor = "#333";
                 }
                 //メールアドレス
                 if (email.value.match(/[^a-zA-Z0-9!-/:-@¥[-`{-~]/)) {
@@ -232,23 +203,80 @@
                     email_alert.textContent = "";
                     email.style.borderColor = "#333";
                 }
-                //パスワード
-                if (phone_num.value.match(/[^0-9]/)) {
-                    phone_num_alert.textContent = "数字のみ入力してください";
-                    phone_num_alert.style.color = "#f00";
-                    phone_num.style.borderColor = "#f00";
+                //氏名・年齢
+                if (people == 1) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                }
+                if (people == 2) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                }
+                if (people == 3) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_1_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                }
+                if (people == 4) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_4, familyname_4_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
+                }
+                if (people == 5) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_1_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_4, familyname_1_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
+                    validation_alert(familyname_5, familyname_1_alert, firstname_5, firstname_5_alert, age_5, age_5_alert)
+                }
+            });
+            function validation_alert(A, B, C, D, E, F) {
+                // 姓
+                if (A.value.match(/[^ァ-ヴー]/)) {
+                    B.textContent = "全角カタカナで入力してください";
+                    B.style.color = "#f00";
+                    A.style.borderColor = "#f00";
                     event.preventDefault();
-                } else if (!phone_num.value) {
-                    phone_num_alert.textContent = "入力してください";
-                    phone_num_alert.style.color = "#f00";
-                    phone_num.style.borderColor = "#f00";
+                } else if (!A.value) {
+                    B.textContent = "入力してください";
+                    B.style.color = "#f00";
+                    A.style.borderColor = "#f00";
                     event.preventDefault();
                 } else {
-                    phone_num_alert.textContent = "";
-                    phone_num.style.borderColor = "#333";
+                    B.textContent = "";
+                    A.style.borderColor = "#333";
                 }
-            })
-        }
+                //       名
+                if (C.value.match(/[^ァ-ヴー]/)) {
+                    D.textContent = "全角カタカナで入力してください";
+                    D.style.color = "#f00";
+                    C.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!C.value) {
+                    D.textContent = "入力してください";
+                    D.style.color = "#f00";
+                    C.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    D.textContent = "";
+                    C.style.borderColor = "#333";
+                }
+                //年齢
+                if (E.value.match(/[^0-9]/)) {
+                    F.textContent = "数字を入力してください";
+                    F.style.color = "#f00";
+                    E.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!E.value) {
+                    F.textContent = "入力してください";
+                    F.style.color = "#f00";
+                    E.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    F.textContent = "";
+                    E.style.borderColor = "#333";
+                }
+            }
         </script>
     </body>
 </html>
