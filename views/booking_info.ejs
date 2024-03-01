@@ -77,6 +77,14 @@
                                     <p>↓</p>
                                     <p><%= arrival %><%= arrival_time %></p>
                                     <p id="total">合計：<%= total %>円(大人<%= people %>名)</p>
+                                    <input type="hidden" name="date" value="<%= date %>">
+                                    <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                                    <input type="hidden" name="departure" value="<%= departure %>">
+                                    <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
+                                    <input type="hidden" name="arrival" value="<%= arrival %>">
+                                    <input type="hidden" name="flight_num" value="<%= flight_num %>">
+                                    <input type="hidden" name="people" value="<%= people %>">
+                                    <input type="hidden" name="total" value="<%= total %>">
                                 </div>
                             </div>
                         </div>

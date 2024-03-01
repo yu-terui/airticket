@@ -7,6 +7,7 @@ const app = express(); //インスタンス化してappに代入
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+//req.bodyの中に送信したデータが保存される
 app.set("view engine", "ejs"); //テンプレートエンジンをEJSに
 
 const mysql = require("mysql2");
@@ -44,7 +45,7 @@ app.get("/", (req, res) => {
 });
 app.post("/ticket_select/:departure", (req, res) => {
   const sql =
-    "SELECT * FROM flights left join tickets on tickets.flight_num = flights.flight_num where departure = ?";
+    "SELECT * FROM flights where departure = ?";
   let data = req.body;
   con.query(sql, data.departure, function (err, result, fields) {
     if (err) throw err;
@@ -99,7 +100,33 @@ app.post("/booking_info", (req, res) => {
   });
 });
 app.post("/booking_confirm", (req, res) => {
-  res.send(req.body);
+    const sql = "insert into passengers set ?"
+  let data = req.body;
+  let { familyname_1, firstname_1, age_1, sex_1} = data;
+  let { familyname_2, firstname_2, age_2, sex_2} = data;
+  let { familyname_3, firstname_3, age_3, sex_3} = data;
+  let { familyname_4, firstname_4, age_4, sex_4} = data;
+  let { familyname_5, firstname_5, age_5, sex_5} = data;
+  let data1 = { familyname: familyname_1, firstname: firstname_1, age: age_1, sex: sex_1}
+  let data2 = { familyname: familyname_2, firstname: firstname_2, age: age_2, sex: sex_2}
+  let data3 = { familyname: familyname_3, firstname: firstname_3, age: age_3, sex: sex_3}
+  let data4 = { familyname: familyname_4, firstname: firstname_4, age: age_4, sex: sex_4}
+  let data5 = { familyname: familyname_5, firstname: firstname_5, age: age_5, sex: sex_5}
+  let datas = [data1, data2, data3, data4, data5];
+  con.query(sql, datas, function (err, result, fields) {
+    if (err) throw err;
+    // res.render("booking_confirm", {
+    //   date: data.date,
+    //   flight_num: data.flight_num,
+    //   departure: data.departure,
+    //   departure_time: data.departure_time,
+    //   arrival: data.arrival,
+    //   arrival_time: data.arrival_time,
+    //   people: data.people,
+    //   total: data.total,
+    // });
+    res.send(datas);
+});
 });
 app.get("/member_login", (req, res) => {
   res.render("member_login");

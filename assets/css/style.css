@@ -193,9 +193,17 @@ cursor: pointer;
   padding: 10px 20px;
   border: 1px solid #ccc;
 }
+#ticket_check button{
+  margin: 0;
+}
 #ticket_check #total {
   font-weight: bold;
   font-size: 120%;
+}
+@media screen and (max-width: 768px) {
+  #ticket_check td {
+    padding: 5px;
+  }
 }
 /* booking_search */
 #booking_search input {
