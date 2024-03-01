@@ -26,11 +26,11 @@
                 <h2>ご予約が確定しました。</h2>
                 <div>
                     <h3>ご予約内容</h3>
-                    <p>日にち</p>
-                    <p>東京11:00→大阪→12:00</p>
-                    <p>XYZ100</p>
-                    <p>大人1名</p>
-                    <p id="total">合計 10,000円</p>
+                    <p><%= date %></p>
+                    <p><%= flight_num %></p>
+                    <p><%= departure_time %> <%= departure %> → <%= arrival_time %> <%= arrival %></p>
+                    <p>大人<%= people %>名</p>
+                    <p id="total">合計<%= total %>円</p>
                 </div>
                 <div>
                     <p class="button"><a href="/">TOPへ戻る</a></p>
