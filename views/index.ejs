@@ -11,13 +11,13 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                    <nav>
+                     <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
                             <li><a href="/member_login">ログイン</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav>
+                    </nav> 
                 </div>
             </div>
         </header>
@@ -73,8 +73,8 @@
         </footer>
         <script type="text/javascript">
             // データ取得
-            const flights = JSON.parse('<%= JSON.stringify(flights) %>'.replace(/&#34;/g, '"'));
             let search_btn = document.getElementById("search_btn");
+            let date = document.querySelector('[name="date"]');
             let departure = document.querySelector('[name="departure"]');
             let arrival = document.querySelector('[name="arrival"]');
             let spot_alert = document.getElementById("spot_alert");

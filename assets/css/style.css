@@ -105,12 +105,6 @@ button:hover {
   padding: 10px;
   margin: 0 30px;
 }
-#airplane {
-  background: url("../img/飛行機アイコン.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
 #index form {
   margin-bottom: 30px;
 }

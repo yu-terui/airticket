@@ -11,13 +11,13 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                    <nav>
+                     <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
                             <li><a href="/member_login">ログイン</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav>
+                    </nav> 
                 </div>
             </div>
         </header>
@@ -58,7 +58,8 @@
                                         <tr>
                                             <th>メールアドレス</th>
                                             <td>
-                                                <select name="who" id="who">
+                                                <select id="who">
+                                                    <input type="hidden" id="who_selected" name="who_selected">
                                                 </select>
                                             </td>
                                             <td><input type="text" name="email" id="email" placeholder="例：example@example.com">
@@ -158,6 +159,7 @@
             }
             //contact_info
             let who = document.getElementById("who");
+            let who_selected = document.getElementById("who_selected");
             for (let i = 0; i < people; i++) {
                 let row_index = customer_info_table.rows[i].rowIndex + 1;
                 let option = document.createElement("option");
@@ -168,6 +170,7 @@
             //バリデーション機能
             let confirm_btn = document.getElementById("confirm_btn")
             confirm_btn.addEventListener("click", function (event) {
+                who_selected.value = who.value;
                 for (let i = 0; i < people; i++) {
                     let row_index = customer_info_table.rows[i].rowIndex + 1;
                     eval("let familyname_" + i + 1 + "=" + i + 1 + ";")
