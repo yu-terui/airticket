@@ -158,7 +158,6 @@ app.post("/booking_confirm", (req, res) => {
     res.send(converted);
   });
 });
-
 app.get("/member_register", (req, res) => {
   res.render("member_register");
 });
