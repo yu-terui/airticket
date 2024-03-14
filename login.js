@@ -32,23 +32,23 @@ router.post("/member_login", (req, res) => {
 });
 
 // ログイン後の遷移画面
-// router.post("/booking_info", (req, res) => {
-//   const sql = "SELECT * FROM flights";
-//   let data = req.body;
-//   con.query(sql, req.body, function (err, result) {
-//     if (err) throw err;
-//     res.render("booking_info", {
-//       date: data.date,
-//       flight_num: data.flight_num,
-//       departure: data.departure,
-//       departure_time: data.departure_time,
-//       arrival: data.arrival,
-//       arrival_time: data.arrival_time,
-//       people: data.people,
-//       total: data.total,
-//     });
-//   });
-// });
+router.post("/booking_info", (req, res) => {
+  const sql = "SELECT * FROM flights";
+  let data = req.body;
+  con.query(sql, req.body, function (err, result) {
+    if (err) throw err;
+    res.render("booking_info", {
+      date: data.date,
+      flight_num: data.flight_num,
+      departure: data.departure,
+      departure_time: data.departure_time,
+      arrival: data.arrival,
+      arrival_time: data.arrival_time,
+      people: data.people,
+      total: data.total,
+    });
+  });
+});
 
 // ログイン分岐
 router.post(
@@ -114,23 +114,23 @@ function is_login(req, res, next) {
 // ミドルウェアでログインしているかチェックし、ログインしているならreq.userのDBを見せる
 router.get('/booking_info', is_login, function (req, res) {
   // deserializeUserで得られたuserのDBデータ持ってくる
-  const sql = "SELECT * FROM flights";
-  let data = req.body;
-  con.query(sql, req.body, function (err, result) {
-    if (err) throw err;
-    res.render("booking_info", {
-      date: data.date,
-      flight_num: data.flight_num,
-      departure: data.departure,
-      departure_time: data.departure_time,
-      arrival: data.arrival,
-      arrival_time: data.arrival_time,
-      people: data.people,
-      total: data.total,
-    });
-  });
-  // console.log(req.user)
-  // res.send(req.user)
+  // const sql = "SELECT * FROM flights";
+  // let data = req.body;
+  // con.query(sql, req.body, function (err, result) {
+  //   if (err) throw err;
+  //   res.render("booking_info", {
+  //     date: data.date,
+  //     flight_num: data.flight_num,
+  //     departure: data.departure,
+  //     departure_time: data.departure_time,
+  //     arrival: data.arrival,
+  //     arrival_time: data.arrival_time,
+  //     people: data.people,
+  //     total: data.total,
+  //   });
+  // });
+  console.log(req.user)
+  res.send(req.user)
 })
 
 module.exports = router;
