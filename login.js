@@ -13,7 +13,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 // ログイン画面
-router.get("/member_login", (req, res) => {
+router.post("/member_login", (req, res) => {
   const sql = "SELECT * FROM flights";
   let data = req.body;
   con.query(sql, req.body, function (err, result) {
