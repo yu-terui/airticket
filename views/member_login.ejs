@@ -11,19 +11,18 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                     <nav>
+                    <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
-                            <li><a href="/member_login">ログイン</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav> 
+                    </nav>
                 </div>
             </div>
         </header>
         <main>
             <div class="container">
-                <div id="memberes">
+                <div id="members">
                     <h2>会員ログイン</h2>
                     <form action="/booking_info" method="post">
                         <label for="id">お客様番号</label><input type="text" id="id" name="id" placeholder="例：12345">
@@ -31,10 +30,18 @@
                         <label for="password">パスワード</label><input type="password" id="password" name="password">
                         <p id="password_alert"></p>
                         <button id="login_btn">ログイン</button>
-                    </form>
-                    <div>
-                        <p class="button"><a href="/member_register">新規会員登録へ</a></p>
+                        <div>
+                            <p class="button"><a href="/member_register">新規会員登録へ</a></p>
                     </div>
+                    <input type="hidden" name="date" value="<%= date %>">
+                    <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                    <input type="hidden" name="departure" value="<%= departure %>">
+                    <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
+                    <input type="hidden" name="arrival" value="<%= arrival %>">
+                    <input type="hidden" name="flight_num" value="<%= flight_num %>">
+                    <input type="hidden" name="people" value="<%= people %>">
+                    <input type="hidden" name="total" value="<%= total %>">
+                </form>
                 </div>
             </div>
         </main>
@@ -45,9 +52,9 @@
         </footer>
         <script type="text/javascript">
             let login_btn = document.getElementById("login_btn");
-            login_btn.addEventListener("click", function(){
-            //お客様番号
-            if (!id.value.match(/[0-9]{5}/)) {
+            login_btn.addEventListener("click", function () {
+                //お客様番号
+                if (!id.value.match(/[0-9]{5}/)) {
                     id_alert.textContent = "5桁の数字を入力してください";
                     id_alert.style.color = "#f00";
                     id.style.borderColor = "#f00";

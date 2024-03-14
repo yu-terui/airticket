@@ -11,13 +11,12 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                     <nav>
+                    <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
-                            <li><a href="/member_login">ログイン</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav> 
+                    </nav>
                 </div>
             </div>
         </header>
@@ -36,18 +35,17 @@
                         <tr>
                             <td>
                                 <%= date %>
-                                <input type="hidden" name="date" value="<%= date %>">
+                                    <input type="hidden" name="date" value="<%= date %>">
                             </td>
                             <td>
                                 <%= departure_time %><br>
                                     <%= departure %><br>
                                         <%= arrival_time %><br>
                                             <%= arrival %>
-                                <input type="hidden" name="departure_time" value="<%= departure_time %>">
-                                <input type="hidden" name="departure" value="<%= departure %>">
-                                <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
-                                <input type="hidden" name="arrival" value="<%= arrival %>">
-
+                                                <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                                                <input type="hidden" name="departure" value="<%= departure %>">
+                                                <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
+                                                <input type="hidden" name="arrival" value="<%= arrival %>">
                             </td>
                             <td>XYZ<%= flight_num %><input type="hidden" name="flight_num" value="<%= flight_num %>">
                             </td>
@@ -56,8 +54,7 @@
                                 <%= type %>
                             </td>
                             <td>
-                                <%= people %>名
-                                <input type="hidden" name="people" value="<%= people %>">
+                                <%= people %>名 <input type="hidden" name="people" value="<%= people %>">
                             </td>
                             <td><button id="delete_btn">削除</button></td>
                         </tr>

@@ -1,14 +1,15 @@
 const path = require("path");
 const express = require("express"); //expressモジュールをロード
+const session = require('express-session');
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-// const passport = require("passport");
-// app.use(passport.initialize());
+const passport = require("passport");
 const app = express(); //インスタンス化してappに代入
 
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
 //req.bodyの中に送信したデータが保存される
 app.set("view engine", "ejs"); //テンプレートエンジンをEJSに
 
@@ -22,13 +23,16 @@ const con = mysql.createConnection({
   multipleStatements: true,
 });
 
-// // 他のファイルでmysqlを使えるようにexportします
-// module.exports = con
+// 他のファイルでmysqlを使えるようにexportします
+module.exports = con;
 // // ここでlogin関連のapiを管理
-// app.use('/', require('./login.js'));
+app.use('/', require('./login'));
 
 // cssファイルの取得
 app.use("/assets", express.static("assets"));
+
+// favicon.icoがリクエストされた場合、空のレスポンスを返す。
+app.get("/favicon.ico", (req, res) => {res.status(204);})
 
 //テーブル作成
 con.connect(function (err) {
@@ -86,23 +90,6 @@ app.get("/booking_search", (req, res) => {
 });
 app.get("/booking_check", (req, res) => {
   res.render("booking_check");
-});
-app.post("/booking_info", (req, res) => {
-  const sql = "SELECT * FROM flights";
-  let data = req.body;
-  con.query(sql, req.body, function (err, result) {
-    if (err) throw err;
-    res.render("booking_info", {
-      date: data.date,
-      flight_num: data.flight_num,
-      departure: data.departure,
-      departure_time: data.departure_time,
-      arrival: data.arrival,
-      arrival_time: data.arrival_time,
-      people: data.people,
-      total: data.total,
-    });
-  });
 });
 app.post("/booking_confirm", (req, res) => {
   const sql =
@@ -171,26 +158,7 @@ app.post("/booking_confirm", (req, res) => {
     res.send(converted);
   });
 });
-// app.get("/member_login", (req, res) => {
-//   res.render("member_login");
-// });
-// app.post("/member_login", (req, res) => {
-//   const sql = "SELECT * FROM flights";
-//   let data = req.body;
-//   con.query(sql, req.body, function (err, result) {
-//     if (err) throw err;
-//     res.render("member_login", {
-//       date: data.date,
-//       flight_num: data.flight_num,
-//       departure: data.departure,
-//       departure_time: data.departure_time,
-//       arrival: data.arrival,
-//       arrival_time: data.arrival_time,
-//       people: data.people,
-//       total: data.total,
-//     });
-//   });
-// });
+
 app.get("/member_register", (req, res) => {
   res.render("member_register");
 });

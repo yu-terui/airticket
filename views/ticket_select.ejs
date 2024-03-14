@@ -11,13 +11,12 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                     <nav>
+                    <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
-                            <li><a href="/member_login">ログイン</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav> 
+                    </nav>
                 </div>
             </div>
         </header>
@@ -194,7 +193,7 @@
             let ticket_alert = document.getElementById("ticket_alert")
             check_btn.addEventListener("click", function (event) {
                 let no_select = document.getElementById("no_select")
-                if (no_select.textContent="選択されたチケットはありません") {
+                if (no_select.textContent = "選択されたチケットはありません") {
                     ticket_alert.textContent = "チケットを選択してください"
                     ticket_alert.style.color = "#F00"
                     table.style.borderColor = "#F00"
