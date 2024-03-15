@@ -13,6 +13,23 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 // ログイン画面
+router.get("/member_login", (req, res) => {
+  const sql = "SELECT * FROM flights";
+  let data = req.body;
+  con.query(sql, req.body, function (err, result) {
+    if (err) throw err;
+    res.render("member_login", {
+      date: data.date,
+      flight_num: data.flight_num,
+      departure: data.departure,
+      departure_time: data.departure_time,
+      arrival: data.arrival,
+      arrival_time: data.arrival_time,
+      people: data.people,
+      total: data.total,
+    });
+  });
+});
 router.post("/member_login", (req, res) => {
   const sql = "SELECT * FROM flights";
   let data = req.body;
@@ -32,37 +49,29 @@ router.post("/member_login", (req, res) => {
 });
 
 // ログイン後の遷移画面
-router.get("/booking_info", (req, res) => {
-  const sql = "SELECT * FROM flights";
-  let data = req.body;
-  con.query(sql, req.body, function (err, result) {
-    if (err) throw err;
+router.get("/booking_info/:date/:flight_num/:people/:total", (req, res) => {
+  const sql = "SELECT * FROM flights where date = ? ";
+  let data = req.params;
+  con.query(sql, data, function (err, result) {
+    res.send(data)
+    // if (err) throw err;
+    // res.render("booking_info", {
+    //   date: data.date,
+    //   flight_num: data.flight_num,
+    //   people: data.people,
+    //   total: data.total,
+    // });
+  });
+});
+router.post("/booking_info/:date/:flight_num/:people/:total", (req, res) => {
+  const sql = "SELECT * FROM flights where date = ? ";
+  let data = req.params;
+  con.query(sql, data, function (err, result) {
+    // res.send(data)
+    // if (err) throw err;
     res.render("booking_info", {
       date: data.date,
       flight_num: data.flight_num,
-      departure: data.departure,
-      departure_time: data.departure_time,
-      arrival: data.arrival,
-      arrival_time: data.arrival_time,
-      people: data.people,
-      total: data.total,
-    });
-  });
-});
-
-//失敗したとき
-router.get("/member_login", (req, res) => {
-  const sql = "SELECT * FROM flights";
-  let data = req.body;
-  con.query(sql, req.body, function (err, result) {
-    if (err) throw err;
-    res.render("member_login", {
-      date: data.date,
-      flight_num: data.flight_num,
-      departure: data.departure,
-      departure_time: data.departure_time,
-      arrival: data.arrival,
-      arrival_time: data.arrival_time,
       people: data.people,
       total: data.total,
     });
@@ -70,15 +79,11 @@ router.get("/member_login", (req, res) => {
 });
 
 // ログイン分岐
-router.post(
-  "/booking_info",
+router.post("/booking_info/:date/:flight_num/:people/:total",
   passport.authenticate("local", {
-    successRedirect: "/booking_info",
+    successRedirect: "/booking_info/:date/:flight_num/:people/:total",
     failureRedirect: "/member_login",
-  }),
-  function (req, res) {
-    res.redirect("/");
-  }
+  })
 );
 
 // ログイン処理

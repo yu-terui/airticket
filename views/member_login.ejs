@@ -24,7 +24,7 @@
             <div class="container">
                 <div id="members">
                     <h2>会員ログイン</h2>
-                    <form action="/booking_info" method="post">
+                    <form id="form" method="post">
                         <label for="id">お客様番号</label><input type="text" id="id" name="id" placeholder="例：12345">
                         <p id="id_alert"></p>
                         <label for="password">パスワード</label><input type="password" id="password" name="password">
@@ -32,16 +32,12 @@
                         <button id="login_btn" type="submit">ログイン</button>
                         <div>
                             <p class="button"><a href="/member_register">新規会員登録へ</a></p>
-                    </div>
-                    <input type="hidden" name="date" value="<%= date %>">
-                    <input type="hidden" name="departure_time" value="<%= departure_time %>">
-                    <input type="hidden" name="departure" value="<%= departure %>">
-                    <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
-                    <input type="hidden" name="arrival" value="<%= arrival %>">
-                    <input type="hidden" name="flight_num" value="<%= flight_num %>">
-                    <input type="hidden" name="people" value="<%= people %>">
-                    <input type="hidden" name="total" value="<%= total %>">
-                </form>
+                        </div>
+                        <input type="hidden" name="date" value="<%= date %>">
+                        <input type="hidden" name="flight_num" value="<%= flight_num %>">
+                        <input type="hidden" name="people" value="<%= people %>">
+                        <input type="hidden" name="total" value="<%= total %>">
+                    </form>
                 </div>
             </div>
         </main>
@@ -52,6 +48,12 @@
         </footer>
         <script type="text/javascript">
             let login_btn = document.getElementById("login_btn");
+            let date = document.getElementsByName("date")[0].value;
+            let flight_num = document.getElementsByName("flight_num")[0].value;
+            let people = document.getElementsByName("people")[0].value;
+            let total = document.getElementsByName("total")[0].value;
+            let form = document.getElementById("form");
+            form.setAttribute("action", `/booking_info/${date}/${flight_num}/${people}/${total}`)
             login_btn.addEventListener("click", function () {
                 //お客様番号
                 if (!id.value.match(/[0-9]{5}/)) {
