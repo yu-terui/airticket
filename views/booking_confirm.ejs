@@ -25,9 +25,10 @@
                 <h2>ご予約が確定しました。</h2>
                 <div>
                     <h3>ご予約内容</h3>
+                    <p><%= familyname %> <%= firstname %>様</p>
                     <p><%= date %></p>
-                    <p><%= flight_num %></p>
-                    <p><%= departure_time %> <%= departure %> → <%= arrival_time %> <%= arrival %></p>
+                    <p>XYZ<%= flight_num %>便</p>
+                    <p><%= departure %> <%= departure_time %> → <%= arrival %> <%= arrival_time %></p>
                     <p>大人<%= people %>名</p>
                     <p id="total">合計<%= total %>円</p>
                 </div>

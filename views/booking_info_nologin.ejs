@@ -4,216 +4,7 @@
         <meta charset="UTF-8">
         <title>Airline航空 - 情報入力</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
-        <!-- <link type="text/css" rel="stylesheet" href="../assets/css/style.css"> -->
-        <style>
-            /* 共通 */
-            body {
-                color: #333;
-                position: relative;
-                min-height: 100vh;
-            }
-
-            footer {
-                line-height: 50px;
-                width: 100%;
-                position: absolute;
-                bottom: 0;
-            }
-
-            p {
-                margin: 0;
-                padding: 0;
-            }
-
-            main {
-                padding-top: 20px;
-                padding-bottom: 70px;
-            }
-
-            header,
-            footer {
-                background: navy;
-                color: #fff;
-            }
-
-            li {
-                list-style-type: none;
-            }
-
-            header li {
-                display: inline;
-                padding: 10px;
-            }
-
-            header li a {
-                color: #fff;
-            }
-
-            header li a:hover {
-                color: gold;
-            }
-
-            h1 {
-                font-style: italic;
-            }
-
-            h1 a {
-                color: #fff;
-            }
-
-            h1 a:hover {
-                color: gold;
-                text-decoration: none;
-            }
-
-            .container {
-                width: 768px;
-                margin: auto;
-                text-align: center;
-            }
-
-            .flex {
-                display: flex;
-                justify-content: space-between;
-                align-items: baseline;
-            }
-
-            .grid_2 {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-
-            .grid_4 {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                gap: 20px;
-            }
-
-            button {
-                background: #fff;
-                border: 4px solid rgb(117, 161, 228);
-                border-radius: 30px;
-                padding: 10px 30px;
-                margin: 10px;
-            }
-
-            button:hover {
-                background: rgb(117, 161, 228);
-                color: #fff;
-            }
-
-            .button {
-                display: inline-block;
-            }
-
-            .button a {
-                color: #333;
-                display: block;
-                border: 4px solid rgb(117, 161, 228);
-                border-radius: 30px;
-                padding: 10px 30px;
-                margin: 5px;
-            }
-
-            .button a:hover {
-                color: #fff;
-                background: rgb(117, 161, 228);
-                text-decoration: none;
-            }
-
-            @media screen and (max-width: 768px) {
-                .container {
-                    width: 95%;
-                }
-            }
-
-            /* booking_info */
-            #booking_info input:not([type="radio"]),
-            #booking_info select {
-                display: inline-block;
-                padding: 10px;
-                width: 120px;
-            }
-
-            #booking_info #contact_info_table input {
-                width: 90%;
-            }
-
-            #booking_info label {
-                display: block;
-            }
-
-            #booking_info table {
-                margin: auto;
-            }
-
-            #booking_info th {
-                text-align: left;
-            }
-
-            #booking_info td {
-                padding: 5px 10px;
-            }
-
-            #customer_info td {
-                border: 1px solid #333;
-            }
-
-            #customer_info {
-                padding-bottom: 20px;
-            }
-
-            #contact_info {
-                padding: 20px 0;
-                border-top: 1px solid #333;
-                border-bottom: 1px solid #333;
-            }
-
-            #booking_info .grid_2 {
-                grid-template-columns: 3fr 1fr;
-            }
-
-            #booking_info #selected {
-                padding: 10px;
-                background: rgb(187, 235, 251);
-                margin-bottom: 20px;
-                height: fit-content;
-            }
-
-            #booking_info #selected #date,
-            #booking_info #selected #flight_num {
-                font-weight: bold;
-            }
-
-            #booking_info #selected #total {
-                border-top: 1px solid #333;
-            }
-
-            @media screen and (max-width: 768px) {
-                #booking_info .grid_2 {
-                    grid-template-columns: 1fr;
-                }
-
-                #booking_info table {
-                    width: 90%;
-                }
-
-                #booking_info input:not([type="radio"]),
-                #booking_info select {
-                    width: 100%;
-                }
-
-                #booking_info h3 {
-                    padding-top: 20px;
-                }
-
-                #booking_info #selected {
-                    width: 70%;
-                    margin: auto;
-                }
-            }
-        </style>
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body id="booking_info">
         <header>
@@ -253,8 +44,8 @@
                                         <tr>
                                             <th>電話番号</th>
                                             <td>
-                                                <select name="phone" id="phone">
-                                                    <option value="mobile">携帯</option>
+                                                <select name="phone_kind" id="phone_kind">
+                                                    <option value="mobile" selected>携帯</option>
                                                     <option value="home">自宅</option>
                                                     <option value="company">会社</option>
                                                 </select>
@@ -282,9 +73,16 @@
                                 <div id="selected">
                                     <p id="date"><%= date %></p>
                                     <p id="flight_num">XYZ<%= flight_num %>便</p>
+                                    <p><%= departure %><%= departure_time %></p>
+                                    <p>↓</p>
+                                    <p><%= arrival %><%= arrival_time %></p>
                                     <p id="total">合計：<%= total %>円(大人<%= people %>名)</p>
-                                    <input type="hidden" name="date" value="<%= date %>">
                                     <input type="hidden" name="flight_num" value="<%= flight_num %>">
+                                    <input type="hidden" name="date" value="<%= date %>">
+                                    <input type="hidden" name="departure" value="<%= departure %>">
+                                    <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                                    <input type="hidden" name="arrival" value="<%= arrival %>">
+                                    <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
                                     <input type="hidden" name="people" value="<%= people %>">
                                     <input type="hidden" name="total" value="<%= total %>">
                                 </div>
@@ -421,12 +219,12 @@
                 }
                 if (people == 2) {
                     validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
-                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
                 }
                 if (people == 3) {
                     validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
-                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
-                    validation_alert(familyname_3, familyname_1_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
                 }
                 if (people == 4) {
                     validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
@@ -436,10 +234,10 @@
                 }
                 if (people == 5) {
                     validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
-                    validation_alert(familyname_2, familyname_1_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
-                    validation_alert(familyname_3, familyname_1_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
-                    validation_alert(familyname_4, familyname_1_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
-                    validation_alert(familyname_5, familyname_1_alert, firstname_5, firstname_5_alert, age_5, age_5_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_4, familyname_4_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
+                    validation_alert(familyname_5, familyname_5_alert, firstname_5, firstname_5_alert, age_5, age_5_alert)
                 }
             });
             function validation_alert(A, B, C, D, E, F) {

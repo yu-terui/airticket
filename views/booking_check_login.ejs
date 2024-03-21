@@ -24,11 +24,14 @@
             <div class="container">
                 <div>
                     <h2>ご予約確認</h2>
-                    <p>日にち</p>
-                    <p>東京11:00→大阪→12:00</p>
-                    <p>XYZ100</p>
-                    <p>大人1名</p>
-                    <p id="total">合計 10,000円</p>
+                    <p>お客様番号：<%= data[0].member_id %></p>
+                    <p><%= data[0].familyname %> <%= data[0].firstname %>様</p>
+                    <p>XYZ<%= data[0].flight_num %>便</p>
+                    <p><%= data[0].departure %> <%= data[0].departure_time %></P>
+                    <p>↓</p>
+                    <p><%= data[0].arrival %> <%= data[0].arrival_time %></p>
+                    <p>大人<%= data[0].people %>名</p>
+                    <p id="total">合計 <%= data[0].total %> 円</p>
                 </div>
             </div>
         </main>

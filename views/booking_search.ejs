@@ -11,38 +11,166 @@
             <div class="container">
                 <div class="flex">
                     <h1><a href="/">AIRLINE</a></h1>
-                     <nav>
+                    <nav>
                         <ul>
                             <li><a href="/">予約</a></li>
                             <li><a href="/member_register">会員登録</a></li>
                         </ul>
-                    </nav> 
+                    </nav>
                 </div>
             </div>
+            <style>
+                body {
+                    color: #333;
+                    position: relative;
+                    min-height: 100vh;
+                }
+
+                footer {
+                    line-height: 50px;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                }
+
+                p {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                main {
+                    padding-top: 20px;
+                    padding-bottom: 70px;
+                }
+
+                header,
+                footer {
+                    background: navy;
+                    color: #fff;
+                }
+
+                li {
+                    list-style-type: none;
+                }
+
+                header li {
+                    display: inline;
+                    padding: 10px;
+                }
+
+                header li a {
+                    color: #fff;
+                }
+
+                header li a:hover {
+                    color: gold;
+                }
+
+                h1 {
+                    font-style: italic;
+                }
+
+                h1 a {
+                    color: #fff;
+                }
+
+                h1 a:hover {
+                    color: gold;
+                    text-decoration: none;
+                }
+
+                .container {
+                    width: 768px;
+                    margin: auto;
+                    text-align: center;
+                }
+
+                .flex {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: baseline;
+                }
+
+                .grid_2 {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                }
+
+                .grid_4 {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    gap: 20px;
+                }
+
+                button {
+                    background: #fff;
+                    border: 4px solid rgb(117, 161, 228);
+                    border-radius: 30px;
+                    padding: 10px 30px;
+                    margin: 10px;
+                }
+
+                @media screen and (max-width: 768px) {
+                    .container {
+                        width: 95%;
+                    }
+                }
+
+                /* booking_search */
+                #booking_search input {
+                    width: 250px;
+                    padding: 10px;
+                    display: block;
+                    margin: auto;
+                }
+
+                #booking_search #members {
+                    padding-bottom: 20px;
+                }
+
+                #booking_search #non_members {
+                    padding-top: 20px;
+                    border-top: 1px solid #333;
+                }
+
+                @media screen and (max-width: 768px) {
+
+                    #booking_search select,
+                    #booking_search input {
+                        width: 70%;
+                    }
+
+                    #booking_search .grid_2 {
+                        grid-template-columns: 1fr;
+                        gap: 10px;
+                    }
+                }
+            </style>
         </header>
         <main>
             <div class="container">
-                <form id="members" action="/booking_check" method="get">
+                <form id="members" method="post" action="/booking_check_login/:id">
                     <h2>会員の方</h2>
                     <div class="grid_2">
                         <div>
-                            <label for="customer_number">お客様番号</label><input type="text" id="customer_number" placeholder="例：12345">
-                            <p id="customer_number_alert"></p>
+                            <label for="id">お客様番号</label><input type="text" name="id" id="id" placeholder="例：12345">
+                            <p id="id_alert"></p>
                         </div>
                         <div>
-                            <label for="password">パスワード</label><input type="password" id="password" placeholder="">
+                            <label for="password">パスワード</label><input type="password" name="password" id="password" placeholder="">
                             <p id="password_alert"></p>
                         </div>
                     </div>
-                    <button id="login_btn">ログイン</button>
+                    <button type="submit" id="login_btn">ログイン</button>
                 </form>
-                <form id="non_members" action="/booking_check" method="get">
+                <form id="non_members" method="post" action="/booking_check_nologin">
                     <h2>一般の方</h2>
                     <div class="grid_2">
                         <div><label for="flight_date">搭乗日</label><input type="date" name="flight_date" id="flight_date"></div>
                         <div>
-                            <label for="flight_number">便名</label><input type="text" name="flight_number" id="flight_number" placeholder="例：100(XYZに続く３桁の数字)">
-                            <p id="flight_number_alert"></p>
+                            <label for="flight_num">便名</label><input type="text" name="flight_num" id="flight_num" placeholder="例：100(XYZに続く３桁の数字)">
+                            <p id="flight_num_alert"></p>
                         </div>
                         <div>
                             <label for="familyname">搭乗者：名</label><input type="text" name="familyname" id="familyname" placeholder="例：ヤマダ">
@@ -53,7 +181,7 @@
                             <p id="firstname_alert"></p>
                         </div>
                     </div>
-                    <button id="check_btn">検索</button>
+                    <button type="submit" id="check_btn">検索</button>
                 </form>
             </div>
         </main>
@@ -63,18 +191,18 @@
             </div>
         </footer>
         <script type="text/javascript">
-        //会員ログイン
+            //会員ログイン
             let login_btn = document.getElementById("login_btn");
             login_btn.addEventListener("click", function () {
                 //お客様番号
-                if (!customer_number.value.match(/[0-9]{5}/)) {
-                    customer_number_alert.textContent = "5桁の数字を入力してください";
-                    customer_number_alert.style.color = "#f00";
-                    customer_number.style.borderColor = "#f00";
+                if (!id.value.match(/[0-9]{5}/)) {
+                    id_alert.textContent = "5桁の数字を入力してください";
+                    id_alert.style.color = "#f00";
+                    id.style.borderColor = "#f00";
                     event.preventDefault();
                 } else {
-                    customer_number_alert.textContent = "";
-                    customer_number.style.borderColor = "#333";
+                    id_alert.textContent = "";
+                    id.style.borderColor = "#333";
                 }
                 //パスワード
                 if (password.value.match(/[^a-zA-Z0-9!-/:-@¥[-`{-~]/)) {
@@ -92,7 +220,7 @@
                     password.style.borderColor = "#333";
                 }
             })
-        // date
+            // date
             let dateValue = document.getElementById("flight_date");
             let today = new Date();
             today.setDate(today.getDate());
@@ -110,23 +238,23 @@
             let maxmm = ("0" + (today.getMonth() + 1)).slice(-2);
             let maxdd = ("0" + today.getDate()).slice(-2);
             dateValue.setAttribute("max", maxyyyy + '-' + maxmm + '-' + maxdd)
-        //一般検索
+            //一般検索
             let check_btn = document.getElementById("check_btn");
             check_btn.addEventListener("click", function () {
                 //便名
-                if (!flight_number.value.match(/[0-9]{3}/)) {
-                    flight_number_alert.textContent = "数字3桁を入力してください";
-                    flight_number_alert.style.color = "#f00";
-                    flight_number.style.borderColor = "#f00";
+                if (!flight_num.value.match(/[0-9]{3}/)) {
+                    flight_num_alert.textContent = "数字3桁を入力してください";
+                    flight_num_alert.style.color = "#f00";
+                    flight_num.style.borderColor = "#f00";
                     event.preventDefault();
-                } else if (!flight_number.value) {
-                    flight_number_alert.textContent = "入力してください";
-                    flight_number_alert.style.color = "#f00";
-                    flight_number.style.borderColor = "#f00";
+                } else if (!flight_num.value) {
+                    flight_num_alert.textContent = "入力してください";
+                    flight_num_alert.style.color = "#f00";
+                    flight_num.style.borderColor = "#f00";
                     event.preventDefault();
                 } else {
-                    flight_number_alert.textContent = "";
-                    flight_number.style.borderColor = "#333";
+                    flight_num_alert.textContent = "";
+                    flight_num.style.borderColor = "#333";
                 }
                 //姓
                 if (familyname.value.match(/[^ァ-ヴー]/)) {
