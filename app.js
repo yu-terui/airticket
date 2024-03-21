@@ -38,6 +38,38 @@ app.get("/", (req, res) => {
     res.render("index");
   });
 });
+app.post("/booking_info_login/:id", (req, res) => {
+  const sql = "SELECT * FROM members where id = ?";
+  let data = req.body;
+  con.query(sql, data.id, function (err, result) {
+    if (data.password == result[0].password) {
+      //pass認証
+      res.render("booking_info_login", {
+        members: result,
+        date: data.date,
+        flight_num: data.flight_num,
+        departure: data.departure,
+        departure_time: data.departure_time,
+        arrival: data.arrival,
+        arrival_time: data.arrival_time,
+        people: data.people,
+        total: data.total,
+      });
+    } else {
+      //認証失敗の場合
+      res.render("member_login", {
+        date: data.date,
+        flight_num: data.flight_num,
+        departure: data.departure,
+        departure_time: data.departure_time,
+        arrival: data.arrival,
+        arrival_time: data.arrival_time,
+        people: data.people,
+        total: data.total,
+      });
+    }
+  });
+});
 // チケット選択画面
 app.post("/ticket_select/:departure", (req, res) => {
   const sql = "SELECT * FROM flights where departure = ?";
@@ -93,10 +125,9 @@ app.post("/booking_check_login/:id", (req, res) => {
       res.render("booking_check_login", {
         data: result,
       });
-    }
-    else {
+    } else {
       //認証失敗の場合
-      res.render("booking_search");
+      res.redirect("booking_search");
     }
   });
 });
@@ -119,19 +150,20 @@ app.post("/booking_check_nologin", (req, res) => {
         data.flight_num == result[0].flight_num &&
         data.familyname == result[0].familyname &&
         data.firstname == result[0].firstname
-        ) {
-          //password認証
-          res.render("booking_check_nologin", {
-              data: result,
-          });
-        }
+      ) {
+        //password認証
+        res.render("booking_check_nologin", {
+          data: result,
+        });
+      }
     }
-    );
+  );
 });
 // 予約確定画面
 app.post("/booking_confirm", (req, res) => {
   let data = req.body;
   //ナンバリングしたnameの値を元に戻す
+  // ------------------
   let { familyname_1, firstname_1, age_1, sex_1 } = data;
   let { familyname_2, firstname_2, age_2, sex_2 } = data;
   let { familyname_3, firstname_3, age_3, sex_3 } = data;
@@ -230,24 +262,42 @@ app.post("/booking_confirm", (req, res) => {
       people,
       total,
     ];
-    let sql =
-      "INSERT INTO passengers (member_id, flight_num, familyname, firstname, age, sex, phone_kind, phone_num, email, people, total) values (?),(?),(?),(?),(?)";
-    let converted = datas.map(converter);
-    con.query(sql, converted, function (err, result) {
-      res.render("booking_confirm", {
-        familyname: data.familyname_1,
-        firstname: data.firstname_1,
-        date: data.date,
-        flight_num: data.flight_num,
-        departure: data.departure,
-        departure_time: data.departure_time,
-        arrival: data.arrival,
-        arrival_time: data.arrival_time,
-        people: data.people,
-        total: data.total,
-      });
-    });
   }
+  let sql =
+    "INSERT INTO passengers (member_id, flight_num, familyname, firstname, age, sex, phone_kind, phone_num, email, people, total) values (?),(?),(?),(?),(?)";
+  let converted = datas.map(converter);
+  con.query(sql, converted, function (err, result) {
+    res.render("booking_confirm", {
+      familyname: data.familyname_1,
+      firstname: data.firstname_1,
+      date: data.date,
+      flight_num: data.flight_num,
+      departure: data.departure,
+      departure_time: data.departure_time,
+      arrival: data.arrival,
+      arrival_time: data.arrival_time,
+      people: data.people,
+      total: data.total,
+    });
+  });
+});
+// 予約者情報入力画面（一般）
+app.post("/booking_info_nologin", (req, res) => {
+  const sql = "SELECT * FROM flights";
+  let data = req.body;
+  con.query(sql, data, function (err, result) {
+    if (err) throw err;
+    res.render("booking_info_nologin", {
+      date: data.date,
+      flight_num: data.flight_num,
+      departure: data.departure,
+      departure_time: data.departure_time,
+      arrival: data.arrival,
+      arrival_time: data.arrival_time,
+      people: data.people,
+      total: data.total,
+    });
+  });
 });
 // 予約者情報入力画面（会員）
 app.post("/booking_info_login/:id", (req, res) => {
@@ -280,24 +330,6 @@ app.post("/booking_info_login/:id", (req, res) => {
         total: data.total,
       });
     }
-  });
-});
-// 予約者情報入力画面（一般）
-app.post("/booking_info_nologin", (req, res) => {
-  const sql = "SELECT * FROM flights";
-  let data = req.body;
-  con.query(sql, data, function (err, result) {
-    if (err) throw err;
-    res.render("booking_info_nologin", {
-      date: data.date,
-      flight_num: data.flight_num,
-      departure: data.departure,
-      departure_time: data.departure_time,
-      arrival: data.arrival,
-      arrival_time: data.arrival_time,
-      people: data.people,
-      total: data.total,
-    });
   });
 });
 // 会員ログイン画面
