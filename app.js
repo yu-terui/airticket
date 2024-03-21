@@ -163,7 +163,6 @@ app.post("/booking_check_nologin", (req, res) => {
 app.post("/booking_confirm", (req, res) => {
   let data = req.body;
   //ナンバリングしたnameの値を元に戻す
-  // ------------------
   let { familyname_1, firstname_1, age_1, sex_1 } = data;
   let { familyname_2, firstname_2, age_2, sex_2 } = data;
   let { familyname_3, firstname_3, age_3, sex_3 } = data;
@@ -234,7 +233,19 @@ app.post("/booking_confirm", (req, res) => {
     people: data.people,
     total: data.total,
   };
-  let datas = [data1, data2, data3, data4, data5];
+  let datas = []
+  if (data.people == 1) {
+    datas.push(data1)
+  } else if (data.people == 2) {
+    datas.push(data1, data2)
+  } else if (data.people == 3) {
+    datas.push(data1, data2, data3)
+  } else if (data.people == 4) {
+    datas.push(data1, data2, data3, data4)
+  } else if (data.people == 5) {
+    datas.push(data1, data2, data3, data4, data5)
+  }
+  // let datas = [data1, data2, data3, data4, data5]
   function converter(obj) {
     let {
       member_id,
@@ -263,8 +274,10 @@ app.post("/booking_confirm", (req, res) => {
       total,
     ];
   }
-  let sql =
-    "INSERT INTO passengers (member_id, flight_num, familyname, firstname, age, sex, phone_kind, phone_num, email, people, total) values (?),(?),(?),(?),(?)";
+  let question = "(?),";
+  let sql1 =
+    `INSERT INTO passengers (member_id, flight_num, familyname, firstname, age, sex, phone_kind, phone_num, email, people, total) values ${question.repeat(data.people)}`;
+  let sql = sql1.slice(0, -1)
   let converted = datas.map(converter);
   con.query(sql, converted, function (err, result) {
     res.render("booking_confirm", {
