@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Airline航空 - 情報入力</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap-reboot.min.css">
+        <link type="text/css" rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body id="booking_info">
+        <header>
+            <div class="container">
+                <div class="flex">
+                    <h1><a href="/">AIRLINE</a></h1>
+                    <nav>
+                        <ul>
+                            <li><a href="/">予約</a></li>
+                            <li><a href="/member_register">会員登録</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <div id="form_area">
+                    <form action="/booking_confirm" method="post">
+                        <div class="grid_2">
+                            <div id="infos">
+                                <div id="customer_info">
+                                    <h2>搭乗者情報</h2>
+                                    <table id="customer_info_table">
+                                        <tr>
+                                            <th></th>
+                                            <th>搭乗者：姓</th>
+                                            <th>搭乗者：名</th>
+                                            <th>年齢</th>
+                                            <th>性別</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="contact_info">
+                                    <h2>連絡先情報</h2>
+                                    <table id="contact_info_table">
+                                        <tr>
+                                            <th>電話番号</th>
+                                            <td>
+                                                <select name="phone_kind" id="phone_kind">
+                                                    <option value="mobile" selected>携帯</option>
+                                                    <option value="home">自宅</option>
+                                                    <option value="company">会社</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="text" id="phone_num" name="phone_num" placeholder="例：09011112222">
+                                                <p id="phone_num_alert"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>メールアドレス</th>
+                                            <td>
+                                                <select id="who">
+                                                    <input type="hidden" id="who_selected" name="who_selected">
+                                                </select>
+                                            </td>
+                                            <td><input type="text" name="email" id="email" placeholder="例：example@example.com">
+                                                <p id="email_alert"></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <h3>選択中のチケット</h3>
+                                <div id="selected">
+                                    <p id="date"><%= date %></p>
+                                    <p id="flight_num">XYZ<%= flight_num %>便</p>
+                                    <p><%= departure %><%= departure_time %></p>
+                                    <p>↓</p>
+                                    <p><%= arrival %><%= arrival_time %></p>
+                                    <p id="total">合計：<%= total %>円(大人<%= people %>名)</p>
+                                    <input type="hidden" name="flight_num" value="<%= flight_num %>">
+                                    <input type="hidden" name="date" value="<%= date %>">
+                                    <input type="hidden" name="departure" value="<%= departure %>">
+                                    <input type="hidden" name="departure_time" value="<%= departure_time %>">
+                                    <input type="hidden" name="arrival" value="<%= arrival %>">
+                                    <input type="hidden" name="arrival_time" value="<%= arrival_time %>">
+                                    <input type="hidden" name="people" value="<%= people %>">
+                                    <input type="hidden" name="total" value="<%= total %>">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="confirm_btn">ご予約を確定する</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <small>Copyright &copy; 2024 Airline. All rights reserved.</small>
+            </div>
+        </footer>
+        <script type="text/javascript">
+            //customer_info 人数に応じた入力欄挿入
+            let people = `<%= people %>`;
+            let customer_info_table = document.getElementById("customer_info_table")
+            for (let i = 0; i < people; i++) {
+                let row_index = customer_info_table.rows[i].rowIndex + 1;
+                //タグ生成
+                let tr = document.createElement("tr")
+                let td_number = document.createElement("td")
+                //性別
+                let td_sex = document.createElement("td")
+                //male
+                let input_sex_male = document.createElement("input")
+                let label_sex_male = document.createElement("label")
+                input_sex_male.setAttribute("type", "radio")
+                input_sex_male.setAttribute("name", "sex_" + row_index)
+                input_sex_male.setAttribute("id", "male_" + row_index)
+                input_sex_male.setAttribute("value", "male")
+                input_sex_male.setAttribute("checked", "checked")
+                label_sex_male.setAttribute("for", "male_" + row_index)
+                label_sex_male.innerHTML = "男性"
+                //female
+                let input_sex_female = document.createElement("input")
+                let label_sex_female = document.createElement("label")
+                input_sex_female.setAttribute("type", "radio")
+                input_sex_female.setAttribute("name", "sex_" + row_index)
+                input_sex_female.setAttribute("id", "female_" + row_index)
+                input_sex_female.setAttribute("value", "female")
+                label_sex_female.setAttribute("for", "female_" + row_index)
+                label_sex_female.innerHTML = "女性"
+                //挿入
+                td_number.innerHTML = row_index;
+                tr.append(td_number)
+                table("familyname", "例：ヤマダ")
+                table("firstname", "例：タロウ")
+                table("age", "例：25")
+                td_sex.append(input_sex_male)
+                td_sex.append(label_sex_male)
+                td_sex.append(input_sex_female)
+                td_sex.append(label_sex_female)
+                tr.append(td_sex)
+                customer_info_table.append(tr)
+                function table(data, example) {
+                    //タグの生成
+                    let td_data = document.createElement("td")
+                    let input_data = document.createElement("input")
+                    let data_alert = document.createElement("p")
+                    //属性付与
+                    input_data.setAttribute("name", data + "_" + row_index)
+                    input_data.setAttribute("id", data + "_" + row_index)
+                    input_data.setAttribute("placeholder", example)
+                    data_alert.setAttribute("id", data + "_" + row_index + "_alert")
+                    //挿入
+                    td_data.append(input_data)
+                    td_data.append(data_alert)
+                    tr.append(td_data)
+                }
+            }
+            //contact_info
+            let who = document.getElementById("who");
+            let who_selected = document.getElementById("who_selected");
+            for (let i = 0; i < people; i++) {
+                let row_index = customer_info_table.rows[i].rowIndex + 1;
+                let option = document.createElement("option");
+                option.setAttribute("value", row_index);
+                option.innerHTML = "搭乗者" + row_index;
+                who.append(option);
+            }
+            //バリデーション機能
+            let confirm_btn = document.getElementById("confirm_btn")
+            confirm_btn.addEventListener("click", function (event) {
+                who_selected.value = who.value;
+                for (let i = 0; i < people; i++) {
+                    let row_index = customer_info_table.rows[i].rowIndex + 1;
+                    eval("let familyname_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let firstname_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let age_" + i + 1 + "=" + i + 1 + ";")
+                    eval("let familyname_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    eval("let firstname_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    eval("let age_" + i + 1 + "alert" + "=" + i + 1 + ";")
+                    let phone_num = document.getElementById("phone_num");
+                    let phone_num_alert = document.getElementById("phone_num_alert");
+                    let email = document.getElementById("email");
+                    let email_alert = document.getElementById("email_alert");
+                }
+                //電話番号
+                if (phone_num.value.match(/[^0-9]/)) {
+                    phone_num_alert.textContent = "数字のみを入力してください";
+                    phone_num_alert.style.color = "#f00";
+                    phone_num.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!phone_num.value) {
+                    phone_num_alert.textContent = "入力してください";
+                    phone_num_alert.style.color = "#f00";
+                    phone_num.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    phone_num_alert.textContent = "";
+                    phone_num.style.borderColor = "#333";
+                }
+                //メールアドレス
+                if (email.value.match(/[^a-zA-Z0-9!-/:-@¥[-`{-~]/)) {
+                    email_alert.textContent = "半角英数字記号で入力してください";
+                    email_alert.style.color = "#f00";
+                    email.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!email.value) {
+                    email_alert.textContent = "入力してください";
+                    email_alert.style.color = "#f00";
+                    email.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    email_alert.textContent = "";
+                    email.style.borderColor = "#333";
+                }
+                //氏名・年齢
+                if (people == 1) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                }
+                if (people == 2) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                }
+                if (people == 3) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                }
+                if (people == 4) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_4, familyname_4_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
+                }
+                if (people == 5) {
+                    validation_alert(familyname_1, familyname_1_alert, firstname_1, firstname_1_alert, age_1, age_1_alert)
+                    validation_alert(familyname_2, familyname_2_alert, firstname_2, firstname_2_alert, age_2, age_2_alert)
+                    validation_alert(familyname_3, familyname_3_alert, firstname_3, firstname_3_alert, age_3, age_3_alert)
+                    validation_alert(familyname_4, familyname_4_alert, firstname_4, firstname_4_alert, age_4, age_4_alert)
+                    validation_alert(familyname_5, familyname_5_alert, firstname_5, firstname_5_alert, age_5, age_5_alert)
+                }
+            });
+            function validation_alert(A, B, C, D, E, F) {
+                // 姓
+                if (A.value.match(/[^ァ-ヴー]/)) {
+                    B.textContent = "全角カタカナで入力してください";
+                    B.style.color = "#f00";
+                    A.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!A.value) {
+                    B.textContent = "入力してください";
+                    B.style.color = "#f00";
+                    A.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    B.textContent = "";
+                    A.style.borderColor = "#333";
+                }
+                //       名
+                if (C.value.match(/[^ァ-ヴー]/)) {
+                    D.textContent = "全角カタカナで入力してください";
+                    D.style.color = "#f00";
+                    C.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!C.value) {
+                    D.textContent = "入力してください";
+                    D.style.color = "#f00";
+                    C.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    D.textContent = "";
+                    C.style.borderColor = "#333";
+                }
+                //年齢
+                if (E.value.match(/[^0-9]/)) {
+                    F.textContent = "数字を入力してください";
+                    F.style.color = "#f00";
+                    E.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else if (!E.value) {
+                    F.textContent = "入力してください";
+                    F.style.color = "#f00";
+                    E.style.borderColor = "#f00";
+                    event.preventDefault();
+                } else {
+                    F.textContent = "";
+                    E.style.borderColor = "#333";
+                }
+            }
+        </script>
+    </body>
+</html>
